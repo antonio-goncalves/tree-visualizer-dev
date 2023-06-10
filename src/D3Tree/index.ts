@@ -2,20 +2,23 @@ import * as d3 from 'd3'
 import {TreeElement} from "@/Tree";
 import {DefaultLinkObject, HierarchyLink, HierarchyNode, Link} from "d3";
 
-const DEFAULT_PADDING = 100;
-
 interface D3TreeOptions {
-    onNodeClick?:(node: HierarchyNode<TreeElement>)=>void,
-    onNodeMouseOver?:(node: HierarchyNode<TreeElement>)=>void,
-    onNodeMouseEnter?:(node: HierarchyNode<TreeElement>)=>void,
-    onNodeMouseLeave?:(node: HierarchyNode<TreeElement>)=>void,
+    onNodeClick?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement)=>void,
+    onNodeMouseOver?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement)=>void,
+    onNodeMouseEnter?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement)=>void,
+    onNodeMouseLeave?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement)=>void,
+    onNodeFocusIn?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement)=>void,
+    onNodeFocusOut?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement)=>void,
     width?:number,
     leftPadding?:number,
     rightPadding?:number
     padding?:number
 }
 
-
+const DEFAULT_PADDING = 100;
+const TEXT_PADDING = 10
+const CIRCLE_RADIUS = 5;
+const CIRCLE_RADIUS_OVER = 7;
 
 
 // Copyright 2021 Observable, Inc.
@@ -29,7 +32,7 @@ export default function D3Tree(data:TreeElement,svgEl:SVGSVGElement,options?:D3T
 
     const width = options?.width || 1240 // outer width, in pixels
     // height= undefined, // outer height, in pixels
-    const r = 3 // radius of nodes
+
     const fill = "#999" // fill for nodes
     const stroke = "#555" // stroke for links
     const strokeWidth = 1.5 // stroke width for links
@@ -98,8 +101,8 @@ export default function D3Tree(data:TreeElement,svgEl:SVGSVGElement,options?:D3T
             height: auto; 
             height: intrinsic;
         `)
-        .attr("font-family", "sans-serif")
-        .attr("font-size", 14);
+       // .attr("font-family", "sans-serif")
+       // .attr("font-size", 14);
 
 
     //@ts-ignore
@@ -124,8 +127,17 @@ export default function D3Tree(data:TreeElement,svgEl:SVGSVGElement,options?:D3T
             return color
         })
 
+    function nodeFocusIn(ev: MouseEvent){
+        const element = ev.currentTarget as HTMLAnchorElement
+        element?.querySelector("circle")?.setAttribute("r",CIRCLE_RADIUS_OVER.toString())
+        element?.querySelector("text")?.setAttribute("font-weight","bold")
+    }
 
-
+    function nodeFocusOut(ev: MouseEvent){
+        const element = ev.currentTarget as HTMLElement
+        element?.querySelector("circle")?.setAttribute("r",CIRCLE_RADIUS.toString())
+        element?.querySelector("text")?.setAttribute("font-weight","400")
+    }
     const node = svg.append("g")
         .selectAll("a")
         .data(root.descendants())
@@ -137,37 +149,52 @@ export default function D3Tree(data:TreeElement,svgEl:SVGSVGElement,options?:D3T
         .attr("role","button")
         .attr("tabindex",0)
         .on("keydown",(event,el)=>{
-            console.log(event.key)
             if(event.key === "Enter"){
-                options?.onNodeClick?.(el)
+                const element = event.currentTarget as HTMLAnchorElement
+                options?.onNodeClick?.(el,element)
             }
             if(event.key ==="Tab"){
-                options?.onNodeMouseOver?.(el)
+                //options?.onNodeMouseOver?.(el)
             }
         })
-        .on("click",(_,el)=>{
+        .on("click",(ev,el)=>{
+            const element = ev.currentTarget as HTMLAnchorElement
+            options?.onNodeClick?.(el,element)
+        })
+        .on("mouseover",(ev,el)=>{
+            const element = ev.currentTarget as HTMLAnchorElement
+           options?.onNodeMouseOver?.(el,element)
 
-            options?.onNodeClick?.(el)
         })
-        .on("mouseover",(_,el)=>{
-           options?.onNodeMouseOver?.(el)
+        .on("mouseenter",   (ev,el)=>{
+            const element = ev.currentTarget as HTMLAnchorElement
+            options?.onNodeMouseEnter?.(el,element)
+            nodeFocusIn(ev)
         })
-        .on("mouseenter",(_,el)=>{
-            options?.onNodeMouseEnter?.(el)
+        .on("mouseleave",(ev,el)=>{
+            const element = ev.currentTarget as HTMLAnchorElement
+            options?.onNodeMouseLeave?.(el,element)
+            nodeFocusOut(ev)
+        }).on("focusin",(ev,el)=>{
+            const element = ev.currentTarget as HTMLAnchorElement
+            options?.onNodeFocusIn?.(el,element)
+            nodeFocusIn(ev)
         })
-        .on("mouseleave",(_,el)=>{
-            options?.onNodeMouseLeave?.(el)
+        .on("focusout",(ev,el)=>{
+            const element = ev.currentTarget as HTMLAnchorElement
+            options?.onNodeFocusOut?.(el,element)
+            nodeFocusOut(ev)
         })
 
     node.append("circle")
-        .attr("fill", d => d.children ? stroke : fill)
-        .attr("r", r);
+        .attr("fill", d => fill)
+        .attr("r", CIRCLE_RADIUS);
 
 
 
     if(L) node.append("text")
         .attr("dy", "0.32em")
-        .attr("x", d => d.children ? -6 : 6)
+        .attr("x", d => d.children ? -TEXT_PADDING : TEXT_PADDING)
         .attr("text-anchor", d => d.children ? "end" : "start")
         .attr("paint-order", "stroke")
        // .attr("stroke", halo) //Bug with gesture zoom

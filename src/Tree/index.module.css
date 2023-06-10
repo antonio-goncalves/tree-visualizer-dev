@@ -1,6 +1,8 @@
 .container svg {
     outline:1px solid blue;
 }
+.container svg a:focus-visible{
+}
 
 .container {
     border: 1px solid red;

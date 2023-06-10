@@ -15,10 +15,12 @@ export interface TreeElement {
 
 export interface TreeProps {
     treeElement:TreeElement,
-    onNodeClick?:(node: HierarchyNode<TreeElement>)=>void,
-    onNodeMouseOver?:(node: HierarchyNode<TreeElement>)=>void,
-    onNodeMouseEnter?:(node: HierarchyNode<TreeElement>)=>void,
-    onNodeMouseLeave?:(node: HierarchyNode<TreeElement>)=>void,
+    onNodeClick?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement)=>void,
+    onNodeMouseOver?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement)=>void,
+    onNodeMouseEnter?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement)=>void,
+    onNodeMouseLeave?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement)=>void,
+    onNodeFocusIn?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement)=>void,
+    onNodeFocusOut?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement)=>void,
     resizeDebounceMS?:number,
     padding?:number,
     leftPadding?:number,
@@ -31,11 +33,12 @@ const DEFAULT_DEBOUNCE_MS = 200;
 
 
 
-export default function Tree({treeElement,onNodeClick,resizeDebounceMS=DEFAULT_DEBOUNCE_MS,padding,rightPadding,leftPadding,onNodeMouseOver,onNodeMouseEnter,onNodeMouseLeave}:TreeProps){
+export default function Tree({treeElement,onNodeClick,resizeDebounceMS=DEFAULT_DEBOUNCE_MS,padding,rightPadding,leftPadding,onNodeMouseOver,onNodeMouseEnter,onNodeMouseLeave,onNodeFocusOut,onNodeFocusIn}:TreeProps){
     const ref = useRef<HTMLDivElement | null>(null)
     const svgRef = useRef<SVGSVGElement | null>(null)
 
     useEffect(()=>{
+        console.log("use effect")
         if(!svgRef.current || !ref.current) return
         let remove:(()=>void) | null = null;
         function getD3Tree():void{
@@ -45,13 +48,15 @@ export default function Tree({treeElement,onNodeClick,resizeDebounceMS=DEFAULT_D
                 onNodeMouseOver,
                 onNodeMouseEnter,
                 onNodeMouseLeave,
+                onNodeFocusIn,
+                onNodeFocusOut,
                 width:ref.current!.offsetWidth,
                 rightPadding,
                 leftPadding,
                 padding
             })
         }
-
+        getD3Tree();
         const _getD3Tree = debounce(getD3Tree,resizeDebounceMS)
         const resizeObserver = new ResizeObserver(_getD3Tree as ()=>void)
 
@@ -62,7 +67,7 @@ export default function Tree({treeElement,onNodeClick,resizeDebounceMS=DEFAULT_D
 
         return ()=>{
             remove?.()
-            resizeObserver.unobserve(ref.current!)
+            resizeObserver.disconnect()
         }
     },[svgRef,ref,leftPadding,rightPadding,padding])
 
