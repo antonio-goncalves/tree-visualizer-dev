@@ -16,7 +16,13 @@ export interface TreeElement {
 export interface TreeProps {
     treeElement:TreeElement,
     onNodeClick?:(node: HierarchyNode<TreeElement>)=>void,
-    resizeDebounceMS
+    onNodeMouseOver?:(node: HierarchyNode<TreeElement>)=>void,
+    onNodeMouseEnter?:(node: HierarchyNode<TreeElement>)=>void,
+    onNodeMouseLeave?:(node: HierarchyNode<TreeElement>)=>void,
+    resizeDebounceMS?:number,
+    padding?:number,
+    leftPadding?:number,
+    rightPadding?:number
 
 }
 
@@ -25,16 +31,25 @@ const DEFAULT_DEBOUNCE_MS = 200;
 
 
 
-const Tree:FC<TreeProps> = ({treeElement,onNodeClick,resizeDebounceMS}): ReactElement =>{
+export default function Tree({treeElement,onNodeClick,resizeDebounceMS=DEFAULT_DEBOUNCE_MS,padding,rightPadding,leftPadding,onNodeMouseOver,onNodeMouseEnter,onNodeMouseLeave}:TreeProps){
     const ref = useRef<HTMLDivElement | null>(null)
     const svgRef = useRef<SVGSVGElement | null>(null)
 
     useEffect(()=>{
         if(!svgRef.current || !ref.current) return
         let remove:(()=>void) | null = null;
-        function getD3Tree():()=>void{
+        function getD3Tree():void{
             remove?.()
-            return D3Tree(treeElement,svgRef.current!,{onNodeClick,width:ref.current!.offsetWidth})
+            remove = D3Tree(treeElement,svgRef.current!,{
+                onNodeClick,
+                onNodeMouseOver,
+                onNodeMouseEnter,
+                onNodeMouseLeave,
+                width:ref.current!.offsetWidth,
+                rightPadding,
+                leftPadding,
+                padding
+            })
         }
 
         const _getD3Tree = debounce(getD3Tree,resizeDebounceMS)
@@ -42,14 +57,14 @@ const Tree:FC<TreeProps> = ({treeElement,onNodeClick,resizeDebounceMS}): ReactEl
 
         resizeObserver.observe(ref.current!)
 
-        remove = getD3Tree()
+
 
 
         return ()=>{
             remove?.()
             resizeObserver.unobserve(ref.current!)
         }
-    },[svgRef,ref])
+    },[svgRef,ref,leftPadding,rightPadding,padding])
 
     return (
         <div ref={ref} className={styles.container}>
@@ -57,8 +72,4 @@ const Tree:FC<TreeProps> = ({treeElement,onNodeClick,resizeDebounceMS}): ReactEl
         </div>
     )
 }
-Tree.defaultProps = {
-    resizeDebounceMS:DEFAULT_DEBOUNCE_MS
-}
 
-export default Tree

@@ -1,6 +1,7 @@
 "use client"
 
 import Tree, {TreeElement} from "@/Tree";
+import {useEffect, useState} from "react";
 const _treeElement:TreeElement = {
     id:"root",
     name:"Felidae",
@@ -376,11 +377,34 @@ const treeElement:TreeElement = {
 }
 
 export default function Demo(){
+
+    const [h,setH] = useState<string>("")
+
+
+
     return (
-        <Tree
-            onNodeClick={(e)=>{
-                console.log(e.data.name)
-            }}
-            treeElement={treeElement}/>
+        <div>
+            <h1>Hover: {h}</h1>
+            <Tree
+
+                leftPadding={52}
+                rightPadding={151}
+                onNodeClick={(e)=>{
+                    alert(e.data.name)
+                }}
+                onNodeMouseOver={(e)=>{
+                    console.log("over",e)
+                    setH(e.data.name)
+                }}
+                onNodeMouseEnter={(e)=>{
+                    console.log("enter",e)
+                }}
+                onNodeMouseLeave={(e)=>{
+                    console.log("leave",e)
+                    setH("")
+                }}
+                treeElement={treeElement}/>
+        </div>
+
     )
 }
