@@ -6,7 +6,7 @@ import D3Tree from "@/D3Tree";
 import {HierarchyNode} from "d3";
 import styles from './index.module.css'
 export interface TreeElement {
-    id?:string | number,
+    id:string ,
     name:string,
     children?:TreeElement[],
     color?:string
@@ -69,7 +69,7 @@ export default function Tree({treeElement,onNodeClick,resizeDebounceMS=DEFAULT_D
             remove?.()
             resizeObserver.disconnect()
         }
-    },[svgRef,ref,leftPadding,rightPadding,padding])
+    },[svgRef,ref,leftPadding,rightPadding,padding,treeElement])
 
     return (
         <div ref={ref} className={styles.container}>

@@ -2,207 +2,265 @@ import {TreeElement} from "@/Tree";
 
 const treeData:TreeElement ={
     name:"Felidae",
+    id:"felidae",
     children:[
         {
-            name:"Pantherinae",
-            children:[
+            "name": "Pantherinae",
+            "children": [
                 {
-                    name:"Panthera",
-                    children:[
+                    "name": "Panthera",
+                    "children": [
                         {
-                            name:"Leopard"
+                            "id": "leopard",
+                            "name": "Leopard"
                         },
                         {
-                            name:"Lion"
+                            "id": "lion",
+                            "name": "Lion"
                         },
                         {
-                            name:"Jaguar"
+                            "id": "jaguar",
+                            "name": "Jaguar"
                         },
                         {
-                            name:"Snow Leopard"
+                            "id": "snowLeopard",
+                            "name": "Snow Leopard"
                         },
                         {
-                            name:"Tiger"
+                            "id": "tiger",
+                            "name": "Tiger"
                         }
-                    ]
+                    ],
+                    "id": "panthera"
                 },
                 {
-                    name:"Neofelis",
-                    children:[
+                    "id": "neofelis",
+                    "name": "Neofelis",
+                    "children": [
                         {
-                            name:"Clouded leopard"
+                            "id": "cloudedLeopard",
+                            "name": "Clouded leopard"
                         },
                         {
-                            name:"Sunda clouded leopard"
+                            "id": "sundaCloudedLeopard",
+                            "name": "Sunda clouded leopard"
                         }
                     ]
                 }
-            ]
+            ],
+            "id": "pantherinae"
         },
         {
-            name:"Felinae",
-            children:[
+            "id": "felinae",
+            "name": "Felinae",
+            "children": [
                 {
-                    name:"Caracal",
-                    children: [
+                    "id": "caracal",
+                    "name": "Caracal",
+                    "children": [
                         {
-                            name:"Caracal"
+                            "id": "caracal",
+                            "name": "Caracal"
                         },
                         {
-                            name:"African golden cat"
+                            "id": "africanGoldenCat",
+                            "name": "African golden cat"
                         }
                     ]
                 },
                 {
-                    name:"Leptailurus",
-                    children: [
+                    "id": "leptailurus",
+                    "name": "Leptailurus",
+                    "children": [
                         {
-                            name:"Serval"
+                            "id": "serval",
+                            "name": "Serval"
                         }
                     ]
                 },
                 {
-                    name:"Leopardus",
-                    children: [
+                    "id": "leopardus",
+                    "name": "Leopardus",
+                    "children": [
                         {
-                            name:"Geoffroy's cat"
+                            "id": "geoffroy'SCat",
+                            "name": "Geoffroy's cat"
                         },
                         {
-                            name:"Kodkod"
+                            "id": "kodkod",
+                            "name": "Kodkod"
                         },
                         {
-                            name:"Southern tiger cat"
+                            "id": "southernTigerCat",
+                            "name": "Southern tiger cat"
                         },
                         {
-                            name:"Oncilla"
+                            "id": "oncilla",
+                            "name": "Oncilla"
                         },
                         {
-                            name:"Pampas cat"
+                            "id": "pampasCat",
+                            "name": "Pampas cat"
                         },
                         {
-                            name:"Andean mountain cat"
+                            "id": "andeanMountainCat",
+                            "name": "Andean mountain cat"
                         },
                         {
-                            name:"Ocelot"
+                            "id": "ocelot",
+                            "name": "Ocelot"
                         },
                         {
-                            name:"Margay"
+                            "name": "Margay",
+                            "id": "margay"
                         }
                     ]
                 },
                 {
-                    name:"Catopuma",
-                    children: [
+                    "name": "Catopuma",
+                    "children": [
                         {
-                            name:"Bay cat"
+                            "name": "Bay cat",
+                            "id": "bayCat"
                         },
                         {
-                            name:"Asian golden cat"
+                            "name": "Asian golden cat",
+                            "id": "asianGoldenCat"
                         }
-                    ]
+                    ],
+                    "id": "catopuma"
                 },
                 {
-                    name:"Pardofelis",
-                    children: [
+                    "name": "Pardofelis",
+                    "children": [
                         {
-                            name:"Marbled cat"
+                            "name": "Marbled cat",
+                            "id": "marbledCat"
                         }
-                    ]
+                    ],
+                    "id": "pardofelis"
                 },
                 {
-                    name:"Lynx",
-                    children: [
+                    "name": "Lynx",
+                    "children": [
                         {
-                            name:"Eurasian lynx "
+                            "name": "Eurasian lynx ",
+                            "id": "eurasianLynx"
                         },
                         {
-                            name:"Iberian lynx"
+                            "name": "Iberian lynx",
+                            "id": "iberianLynx"
                         },
                         {
-                            name:"Canada lynx"
+                            "name": "Canada lynx",
+                            "id": "canadaLynx"
                         },
                         {
-                            name:"Bobcat"
+                            "name": "Bobcat",
+                            "id": "bobcat"
                         }
-                    ]
+                    ],
+                    "id": "lynx"
                 },
                 {
-                    name:"Puma",
-                    children: [
+                    "name": "Puma",
+                    "children": [
                         {
-                            name:"Cougar"
+                            "name": "Cougar",
+                            "id": "cougar"
                         }
-                    ]
+                    ],
+                    "id": "puma"
                 },
                 {
-                    name:"Herpailurus",
-                    children: [
+                    "name": "Herpailurus",
+                    "children": [
                         {
-                            name:"Jaguarundi"
+                            "name": "Jaguarundi",
+                            "id": "jaguarundi"
                         }
-                    ]
+                    ],
+                    "id": "herpailurus"
                 },
                 {
-                    name:"Acinonyx",
-                    children: [
+                    "name": "Acinonyx",
+                    "children": [
                         {
-                            name:"Cheetah"
+                            "name": "Cheetah",
+                            "id": "cheetah"
                         }
-                    ]
+                    ],
+                    "id": "acinonyx"
                 },
                 {
-                    name: "Prionailurus",
-                    children: [
+                    "name": "Prionailurus",
+                    "children": [
                         {
-                            name: "Sunda leopard cat"
+                            "name": "Sunda leopard cat",
+                            "id": "sundaLeopardCat"
                         },
                         {
-                            name: "Leopard cat"
+                            "name": "Leopard cat",
+                            "id": "leopardCat"
                         },
                         {
-                            name: "Fishing cat"
+                            "name": "Fishing cat",
+                            "id": "fishingCat"
                         },
                         {
-                            name: "Flat-headed cat"
+                            "name": "Flat-headed cat",
+                            "id": "flat-HeadedCat"
                         },
                         {
-                            name: "Rusty-spotted cat"
+                            "name": "Rusty-spotted cat",
+                            "id": "rusty-SpottedCat"
                         }
-                    ]
+                    ],
+                    "id": "prionailurus"
                 },
                 {
-                    name:"Otocolobus",
-                    children: [
+                    "name": "Otocolobus",
+                    "children": [
                         {
-                            name: "Pallas's cat "
+                            "name": "Pallas's cat ",
+                            "id": "pallas'SCat"
                         }
-                    ]
+                    ],
+                    "id": "otocolobus"
                 },
                 {
-                    name: "Felis",
-                    children: [
+                    "name": "Felis",
+                    "children": [
                         {
-                            name: "Jungle cat"
+                            "name": "Jungle cat",
+                            "id": "jungleCat"
                         },
                         {
-                            name: "Black-footed cat"
+                            "name": "Black-footed cat",
+                            "id": "black-FootedCat"
                         },
                         {
-                            name: "Sand cat"
+                            "name": "Sand cat",
+                            "id": "sandCat"
                         },
                         {
-                            name: "Chinese mountain cat"
+                            "name": "Chinese mountain cat",
+                            "id": "chineseMountainCat"
                         },
                         {
-                            name: "African wildcat"
+                            "name": "African wildcat",
+                            "id": "africanWildcat"
                         },
                         {
-                            name: "European wildcat"
+                            "name": "European wildcat",
+                            "id": "europeanWildcat"
                         },
                         {
-                            name: "Domestic cat"
+                            "name": "Domestic cat",
+                            "id": "domesticCat"
                         }
-                    ]
+                    ],
+                    "id": "felis"
                 }
             ]
         }

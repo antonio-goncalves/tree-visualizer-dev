@@ -1,0 +1,28 @@
+@import "/node_modules/bootstrap/scss/functions";
+@import "/node_modules/bootstrap/scss/variables";
+
+.popover {
+    background-color:gainsboro;
+    border-radius: 8px;
+}
+
+.arrow path {
+    fill:$light;
+}
+
+.container {
+    padding:0 60px;
+}
+
+$breakpoint:map-get($grid-breakpoints,"md");
+
+$max-width:$breakpoint - 1;
+@media (max-width:$max-width) {
+    .container {
+        padding:0;
+    }
+    .popover {
+        display:none;
+    }
+}
+//map-get($grid-breakpoints,"xxl");

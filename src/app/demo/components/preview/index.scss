@@ -1,0 +1,30 @@
+@import "/node_modules/bootstrap/scss/functions";
+@import "/node_modules/bootstrap/scss/variables";
+
+$image-height:250px;
+.preview {
+  background: $light;
+  width:360px;
+
+}
+
+.preview .ph-picture {
+  height:$image-height;
+}
+.preview .ph-row .title {
+  height: 36px;
+  margin: 10px 0;
+}
+.preview .ph-row .paragraph {
+  margin-top:12px;
+}
+
+.preview .ph-row  > *{
+  border-radius: $border-radius;
+}
+
+.preview .image-container {
+  height:$image-height;
+  position: relative;
+}
+
