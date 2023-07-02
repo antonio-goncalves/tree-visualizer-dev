@@ -1,6 +1,11 @@
 @import "/node_modules/bootstrap/scss/functions";
 @import "/node_modules/bootstrap/scss/variables";
 
+.popover-container {
+    position: absolute;
+
+}
+
 .popover {
     background-color:gainsboro;
     border-radius: 8px;
@@ -12,6 +17,9 @@
 
 .container {
     padding:0 60px;
+    border:1px solid green;
+    overflow: hidden;
+    position:relative;
 }
 
 $breakpoint:map-get($grid-breakpoints,"md");

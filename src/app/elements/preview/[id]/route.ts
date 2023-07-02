@@ -16,21 +16,27 @@ const uri = process.env.MONGO_URI || "mongodb://localhost:27017?serverSelectionT
 
 const mongoClient = new mongoDB.MongoClient(uri);
 const animalsDB = mongoClient.db("animals");
-export async function GET(request: NextRequest, context: { params }):Promise<NextResponse<ElementPreview>> {
+
+interface Error {
+    msg:string
+}
+
+export async function GET(request: NextRequest, context: { params }):Promise<NextResponse<ElementPreview | Error>> {
     await mongoClient.connect()
     const collection = animalsDB.collection<ElementDetails>("cats")
 
 
-    await new Promise(resolve=>setTimeout(resolve,150))
+    await new Promise(resolve=>setTimeout(resolve,250))
     const id = context.params.id as string
 
     const result =  await  collection.findOne({_id:id} as Filter<any>)
-    if(true) {
+    if(!result) {
 
 
-        return new Response("{}",{
-            status:500,
-            statusText:"xxx"
+        return NextResponse.json({
+            msg:"Element not found"
+        },{
+            status:404
         })
     }
 

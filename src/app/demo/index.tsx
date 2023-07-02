@@ -3,10 +3,10 @@
 
 import styles from './index.module.scss'
 import Tree, {TreeElement} from "@/Tree";
-import {useEffect, useRef, useState} from "react";
+import {CSSProperties, useEffect, useRef, useState} from "react";
 import treeData from '../treeData'
 import {HierarchyNode} from "d3";
-import {FloatingArrow, flip, useFloating,arrow,detectOverflow} from "@floating-ui/react";
+import {FloatingArrow, flip, useFloating, arrow, detectOverflow, shift, autoPlacement} from "@floating-ui/react";
 import Preview from "@/app/demo/components/preview";
 import PreviewWithData from "@/app/demo/components/previewWithData";
 
@@ -18,30 +18,61 @@ const middleware = {
         return {};
     },
 };
+
+interface PopOverPosition {
+    x:number,
+    y:number
+}
+
+interface AnchorPosition {
+    x:number,
+    y:number,
+    width:number
+}
+
 export default function Index(){
     const arrowRef = useRef(null);
+    const popoverRef = useRef<HTMLDivElement | null>(null)
     const [hoveredElement,setHoveredElement] = useState<string | null>(null)
     const [selectedElement,setSelectedElement] = useState<string | null>(null)
-    const {refs, floatingStyles,update,context} = useFloating({
+    const [popOverPosition,setPopOverPosition] = useState<PopOverPosition | null>()
+    const [anchorPosition,setAnchorPosition] = useState<AnchorPosition | null>()
+    useEffect(()=>{
+
+        if(!popoverRef.current && !anchorPosition) return
+        const resizeObserver = new ResizeObserver((entries) => {
+
+            if(!popOverPosition) {
+
+                return
+            }
+            const {x,y} = getPopOverPosition(anchorPosition!)
+            setPopOverPosition({
+                x,y
+            })
+        })
+        resizeObserver.observe(popoverRef.current!)
+        return ()=>{
+            resizeObserver.disconnect()
+        }
+
+    },[popoverRef,anchorPosition])
+
+   /* const {refs, floatingStyles,update,context} = useFloating({
 
 
         middleware:[
-           flip({fallbackPlacements:["bottom","left","right","bottom-end","left-end"]}),
+            //shift({crossAxis:true}),
+           //   flip({fallbackPlacements:["bottom","left","right","bottom-end","left-end"]}),
+            shift(),
             arrow({element:arrowRef})
 
         ],
 
-    });
-    console.log("selectedElement",selectedElement)
-    useEffect(()=>{
-        setTimeout(()=>{
-            update()
-            console.log("update")
-        },5000)
-    },[])
+    });*/
 
     function onNodeClick(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement){
-        console.log("clicking",el)
+
         setSelectedElement(e.data.id)
 
        /* createPopper(el,ref.current, {
@@ -49,11 +80,44 @@ export default function Index(){
         })*/
     }
 
+    function getPopOverPosition(anchorPosition:{x:number,y:number}):{x:number,y:number} {
+        const popoverHeight = popoverRef.current?.offsetHeight || 0
+        const x = anchorPosition.x + window.scrollX
+        let y = anchorPosition.y + window.scrollY
+        const minY = popoverHeight/2
+        const maxY = window.innerHeight - popoverHeight/2
+        if(y>=maxY) y = maxY
+        if(y<minY) y = minY
+
+        return {x,y}
+    }
+
     function onNodeMouseEnter(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement){
-        refs.setReference(el)
+       // refs.setReference(el)
+
+
+
+       // setTimeout(()=>{
+            const domRect = el.getBoundingClientRect()
+
+            const {x,y} = getPopOverPosition(domRect)
+            setAnchorPosition({
+                x:domRect.x,
+                y:domRect.y,
+                width:domRect.width
+            })
+            setPopOverPosition({
+                x,
+                y
+            })
+        //},0)
+
+
+
         setHoveredElement(e.data.id)
     }
     function onNodeMouseLeave(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement){
+        setPopOverPosition(null)
         setHoveredElement(null)
     }
 
@@ -77,18 +141,29 @@ export default function Index(){
        )
     }
 
+    function getPopOverStyle():CSSProperties | undefined {
+        if(!popOverPosition || !anchorPosition) return
+
+        return {
+            left:popOverPosition.x,
+            top:popOverPosition.y,
+            //transform:"translate(-100%,-50%)",
+            transform:`translate(${anchorPosition.width}px,-50%)`
+        }
+    }
+
     function renderPopOver(){
         let render = null
         if(hoveredElement){
             render =(
                 <div className={styles.popover}>
-                    <FloatingArrow className={styles.arrow} width={20} height={10} ref={arrowRef} context={context} />
+                    {/*<FloatingArrow className={styles.arrow} width={20} height={10} ref={arrowRef}/>*/}
                     <PreviewWithData id={hoveredElement} />
                 </div>
             )
         }
         return (
-            <div style={{...floatingStyles}} ref={refs.setFloating}>
+            <div ref={popoverRef} className={styles["popover-container"]}  style={getPopOverStyle()}>
                 {render}
             </div>
         )
@@ -96,9 +171,10 @@ export default function Index(){
 
     function renderInfo(){
         return (
-            <div style={{top:0,left:0}} className={"position-fixed"}>
+            <div style={{top:0,left:0,zIndex:3000,backgroundColor:"white",padding:20,border:"1px solid black"}} className={"position-fixed"}>
                 <p>Hovered element: {hoveredElement}</p>
                 <p>Selected element: {selectedElement}</p>
+                <p>Position: X: {popOverPosition?.x} Y: {popOverPosition?.y}</p>
             </div>
         )
     }

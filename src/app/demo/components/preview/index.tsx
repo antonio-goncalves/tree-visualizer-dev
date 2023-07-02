@@ -5,12 +5,13 @@ import Image from "next/image";
 import {ElementPreview} from "@/app/demo/types";
 interface  PopoverProps {
     data?:ElementPreview,
-    isLoading?:boolean
+    isLoading?:boolean,
+    failed?:boolean
 }
 
 
 
-export default function Preview({data,isLoading}:PopoverProps){
+export default function Preview({data,isLoading,failed}:PopoverProps){
 
     function renderPlaceholders(){
         return (
@@ -35,6 +36,11 @@ export default function Preview({data,isLoading}:PopoverProps){
     }
 
     function renderInfo(){
+        if(failed){
+            return (
+                <p className={"mb-0 text-danger text-center"}>Failed while loading the data</p>
+            )
+        }
         if(isLoading){
             return renderPlaceholders()
         }
