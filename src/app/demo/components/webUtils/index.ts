@@ -1,5 +1,5 @@
 
-function getNumberFromCSSString(str:string,unit:string = "px"):number{
+export function getNumberFromCSSString(str:string,unit:string = "px"):number{
     return Number(str.split(unit)[0])
 }
 

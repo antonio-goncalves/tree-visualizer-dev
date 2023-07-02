@@ -1,6 +1,8 @@
 
 import classnames from 'classnames'
 import './index.scss'
+
+
 import Image from "next/image";
 import {ElementPreview} from "@/app/demo/types";
 interface  PopoverProps {

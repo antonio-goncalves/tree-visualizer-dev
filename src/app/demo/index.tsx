@@ -2,6 +2,8 @@
 
 
 import styles from './index.module.scss'
+import previewStyles from '/src/app/demo/components/preview/index.module.scss'
+
 import Tree, {TreeElement} from "@/Tree";
 import {CSSProperties, useEffect, useRef, useState} from "react";
 import treeData from '../treeData'
@@ -9,19 +11,14 @@ import {HierarchyNode} from "d3";
 import {FloatingArrow, flip, useFloating, arrow, detectOverflow, shift, autoPlacement} from "@floating-ui/react";
 import Preview from "@/app/demo/components/preview";
 import PreviewWithData from "@/app/demo/components/previewWithData";
+import {getNumberFromCSSString} from "@/app/demo/components/webUtils";
 
-const middleware = {
-    name: 'middleware',
-    async fn(state) {
-        const overflow = await detectOverflow(state);
-        console.log(overflow)
-        return {};
-    },
-};
+const popOverWidth = getNumberFromCSSString(previewStyles.popOverWidth);
 
 interface PopOverPosition {
     x:number,
-    y:number
+    y:number,
+    flipLeft:boolean
 }
 
 interface AnchorPosition {
@@ -46,9 +43,13 @@ export default function Index(){
 
                 return
             }
-            const {x,y} = getPopOverPosition(anchorPosition!)
+            const newPopOverPosition = getPopOverPosition(anchorPosition!)
+            if(!newPopOverPosition) return
+            const {x,y,flipLeft} = newPopOverPosition
             setPopOverPosition({
-                x,y
+                x,
+                y,
+                flipLeft
             })
         })
         resizeObserver.observe(popoverRef.current!)
@@ -80,16 +81,31 @@ export default function Index(){
         })*/
     }
 
-    function getPopOverPosition(anchorPosition:{x:number,y:number}):{x:number,y:number} {
+    function getPopOverPosition(anchorPosition:{x:number,y:number}):PopOverPosition | undefined{
+
         const popoverHeight = popoverRef.current?.offsetHeight || 0
+        const popoverWidth = popOverWidth || popoverRef.current?.offsetWidth || 0
+        console.log(popoverWidth,popoverHeight)
+       // if(popoverWidth === 0 || popoverHeight ===0 ) return
+        let flipLeft:boolean = false;
         const x = anchorPosition.x + window.scrollX
         let y = anchorPosition.y + window.scrollY
-        const minY = popoverHeight/2
-        const maxY = window.innerHeight - popoverHeight/2
-        if(y>=maxY) y = maxY
-        if(y<minY) y = minY
+        const minY = popoverHeight/2  + window.scrollY
+        const maxY = window.innerHeight + window.scrollY - popoverHeight/2
+        const maxX = window.innerWidth + window.scrollX - popoverWidth
 
-        return {x,y}
+        if(y>maxY) y = maxY
+        if(y<=minY) y = minY
+
+        if(x>maxX){
+            flipLeft = true
+        }
+
+        return {
+            x,
+            y,
+            flipLeft
+        }
     }
 
     function onNodeMouseEnter(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement){
@@ -97,27 +113,29 @@ export default function Index(){
 
 
 
-       // setTimeout(()=>{
-            const domRect = el.getBoundingClientRect()
 
-            const {x,y} = getPopOverPosition(domRect)
-            setAnchorPosition({
-                x:domRect.x,
-                y:domRect.y,
-                width:domRect.width
-            })
-            setPopOverPosition({
-                x,
-                y
-            })
-        //},0)
+        const domRect = el.getBoundingClientRect()
+        const newPopoverPosition = getPopOverPosition(domRect)
+
+        const {x,y,flipLeft} = newPopoverPosition
+        setAnchorPosition({
+            x:domRect.x,
+            y:domRect.y,
+            width:domRect.width
+        })
+        setPopOverPosition({
+            x,
+            y,
+            flipLeft
+        })
+
 
 
 
         setHoveredElement(e.data.id)
     }
     function onNodeMouseLeave(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement){
-        setPopOverPosition(null)
+       // setPopOverPosition(null)
         setHoveredElement(null)
     }
 
@@ -143,12 +161,12 @@ export default function Index(){
 
     function getPopOverStyle():CSSProperties | undefined {
         if(!popOverPosition || !anchorPosition) return
-
+        const transform = popOverPosition.flipLeft?"translate(-100%,-50%)":`translate(${anchorPosition.width}px,-50%)`
         return {
             left:popOverPosition.x,
             top:popOverPosition.y,
             //transform:"translate(-100%,-50%)",
-            transform:`translate(${anchorPosition.width}px,-50%)`
+            transform
         }
     }
 
