@@ -105,8 +105,8 @@ export default function Index(){
         let y = anchorPosition.y + window.scrollY
         const arrowX =x;
         const arrowY = y
-        const minY = popoverHeight/2  + window.scrollY
-        const maxY = window.innerHeight + window.scrollY - popoverHeight/2
+        const minY = popoverHeight/2  + window.scrollY - getAnchorMargin()
+        const maxY = window.innerHeight + window.scrollY - popoverHeight/2 - getAnchorMargin()
         const maxX = window.innerWidth + window.scrollX - popoverWidth
 
         if(y>maxY) y = maxY
@@ -155,11 +155,16 @@ export default function Index(){
         setHoveredElement(e.data.id)
     }
     function onNodeMouseLeave(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev){
-        console.log(ev.toElement)
+
         const element = ev.toElement as HTMLElement
-        if(element.classList.contains(styles["popover-container"])){
+        console.log(styles.arrow,element)
+        if(element?.classList?.contains(styles.arrow)){
             return
         }
+        unsetHoveredElement()
+    }
+
+    function unsetHoveredElement(){
         setPopOverPosition(null)
         setHoveredElement(null)
     }
@@ -184,10 +189,15 @@ export default function Index(){
        )
     }
 
+    function getAnchorMargin():number | undefined{
+        if(!anchorPosition) return
+        return anchorPosition.height/2
+    }
+
     function getArrowStyle():CSSProperties | undefined {
         if(!popOverPosition || !anchorPosition) return
-
-        const transform = popOverPosition.flipLeft?`translate(-100%, calc(-50% + ${anchorPosition.height/2}px))`:`translate(${anchorPosition.width}px,calc(-50% + ${anchorPosition.height/2}px))`
+        const yTransform = `calc(-50% + ${getAnchorMargin()}px)`
+        const transform = popOverPosition.flipLeft?`translate(-100%, ${yTransform})`:`translate(${anchorPosition.width}px,${yTransform})`
         return {
             left:popOverPosition.arrowX,
             top:popOverPosition.arrowY,
@@ -196,13 +206,15 @@ export default function Index(){
     }
 
     function getPopOverStyle():CSSProperties | undefined {
-        const PADDING = 120;
+        const PADDING = 15;
         if(!popOverPosition || !anchorPosition) return
         let paddingLeft,paddingRight
         const deltaX = popOverPosition.flipLeft?-PADDING:PADDING
-        const transform = popOverPosition.flipLeft?"translate(-100%,-50%)":`translate(${anchorPosition.width}px,-50%)`
+        const yTransform = `calc(-50% + ${getAnchorMargin()}px)`
+        const transform = popOverPosition.flipLeft?`translate(-100%,${yTransform})`:`translate(${anchorPosition.width}px,${yTransform})`
         if(popOverPosition.flipLeft) paddingRight = PADDING
         else paddingLeft = PADDING
+        console.log(popOverPosition.arrowY,popOverPosition.y)
         return {
             //backgroundColor:"red",
             left:popOverPosition.x + deltaX,
@@ -235,14 +247,25 @@ export default function Index(){
         }
         return (
             <>
-                {false && <div className={classnames(styles.arrow,getArrowClassName())} style={getArrowStyle()}></div>}
-                <div ref={popoverRef} className={styles["popover-container"]}  style={getPopOverStyle()}>
+                {renderArrow()}
+                <div ref={popoverRef} onMouseLeave={onMouseLeave} className={styles["popover-container"]}  style={getPopOverStyle()}>
 
                     {render}
                 </div>
             </>
 
         )
+    }
+
+    function renderArrow(){
+        if(!hoveredElement) return null
+        return <div onMouseLeave={onMouseLeave} className={classnames(styles.arrow, getArrowClassName())} style={getArrowStyle()}/>
+    }
+
+    function onMouseLeave(e:React.MouseEvent){
+        const target = e.relatedTarget as HTMLDivElement | undefined
+        if(target?.classList?.contains("preview") || target?.classList?.contains(styles.arrow )) return
+        unsetHoveredElement()
     }
 
     function renderInfo(){

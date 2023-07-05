@@ -25,7 +25,7 @@
 .arrow {
     position:absolute;
 }
-$arrow-size: 80px;
+$arrow-size: 15px;
 
 .arrow-left {
     width: 0;
@@ -33,7 +33,7 @@ $arrow-size: 80px;
     border-top: #{$arrow-size} solid transparent;
     border-bottom: #{$arrow-size} solid transparent;
 
-    border-right:#{$arrow-size} solid blue;
+    border-right:#{$arrow-size} solid gainsboro;
 }
 
 .arrow-right {
@@ -42,7 +42,7 @@ $arrow-size: 80px;
     border-top: #{$arrow-size} solid transparent;
     border-bottom: #{$arrow-size} solid transparent;
 
-    border-left: #{$arrow-size} solid green;
+    border-left: #{$arrow-size} solid gainsboro;
 }
 $breakpoint:map-get($grid-breakpoints,"md");
 
