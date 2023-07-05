@@ -4,7 +4,7 @@
 import styles from './index.module.scss'
 import previewStyles from '/src/app/demo/components/preview/index.module.scss'
 
-import Tree, {TreeElement} from "@/Tree";
+import Tree, {TreeElement} from "@/app/demo/components/Tree";
 import {CSSProperties, useEffect, useRef, useState} from "react";
 import treeData from '../treeData'
 import {HierarchyNode} from "d3";
@@ -12,19 +12,23 @@ import {FloatingArrow, flip, useFloating, arrow, detectOverflow, shift, autoPlac
 import Preview from "@/app/demo/components/preview";
 import PreviewWithData from "@/app/demo/components/previewWithData";
 import {getNumberFromCSSString} from "@/app/demo/components/webUtils";
+import classnames from "classnames";
 
 const popOverWidth = getNumberFromCSSString(previewStyles.popOverWidth);
 
 interface PopOverPosition {
     x:number,
     y:number,
+    arrowX:number,
+    arrowY:number,
     flipLeft:boolean
 }
 
 interface AnchorPosition {
     x:number,
     y:number,
-    width:number
+    width:number,
+    height:number
 }
 
 export default function Index(){
@@ -34,6 +38,13 @@ export default function Index(){
     const [selectedElement,setSelectedElement] = useState<string | null>(null)
     const [popOverPosition,setPopOverPosition] = useState<PopOverPosition | null>()
     const [anchorPosition,setAnchorPosition] = useState<AnchorPosition | null>()
+
+    useEffect(()=>{
+        window.addEventListener("scroll",(e)=>{
+            console.log(e)
+           e.preventDefault()
+        })
+    },[])
     useEffect(()=>{
 
         if(!popoverRef.current && !anchorPosition) return
@@ -45,10 +56,12 @@ export default function Index(){
             }
             const newPopOverPosition = getPopOverPosition(anchorPosition!)
             if(!newPopOverPosition) return
-            const {x,y,flipLeft} = newPopOverPosition
+            const {x,y,arrowY,arrowX,flipLeft} = newPopOverPosition
             setPopOverPosition({
                 x,
                 y,
+                arrowY,
+                arrowX,
                 flipLeft
             })
         })
@@ -90,6 +103,8 @@ export default function Index(){
         let flipLeft:boolean = false;
         const x = anchorPosition.x + window.scrollX
         let y = anchorPosition.y + window.scrollY
+        const arrowX =x;
+        const arrowY = y
         const minY = popoverHeight/2  + window.scrollY
         const maxY = window.innerHeight + window.scrollY - popoverHeight/2
         const maxX = window.innerWidth + window.scrollX - popoverWidth
@@ -104,6 +119,8 @@ export default function Index(){
         return {
             x,
             y,
+            arrowX,
+            arrowY,
             flipLeft
         }
     }
@@ -117,15 +134,18 @@ export default function Index(){
         const domRect = el.getBoundingClientRect()
         const newPopoverPosition = getPopOverPosition(domRect)
 
-        const {x,y,flipLeft} = newPopoverPosition
+        const {x,y,flipLeft,arrowY,arrowX} = newPopoverPosition
         setAnchorPosition({
             x:domRect.x,
             y:domRect.y,
-            width:domRect.width
+            width:domRect.width,
+            height:domRect.height
         })
         setPopOverPosition({
             x,
             y,
+            arrowY,
+            arrowX,
             flipLeft
         })
 
@@ -134,8 +154,13 @@ export default function Index(){
 
         setHoveredElement(e.data.id)
     }
-    function onNodeMouseLeave(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement){
-       // setPopOverPosition(null)
+    function onNodeMouseLeave(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev){
+        console.log(ev.toElement)
+        const element = ev.toElement as HTMLElement
+        if(element.classList.contains(styles["popover-container"])){
+            return
+        }
+        setPopOverPosition(null)
         setHoveredElement(null)
     }
 
@@ -159,15 +184,38 @@ export default function Index(){
        )
     }
 
-    function getPopOverStyle():CSSProperties | undefined {
+    function getArrowStyle():CSSProperties | undefined {
         if(!popOverPosition || !anchorPosition) return
-        const transform = popOverPosition.flipLeft?"translate(-100%,-50%)":`translate(${anchorPosition.width}px,-50%)`
+
+        const transform = popOverPosition.flipLeft?`translate(-100%, calc(-50% + ${anchorPosition.height/2}px))`:`translate(${anchorPosition.width}px,calc(-50% + ${anchorPosition.height/2}px))`
         return {
-            left:popOverPosition.x,
-            top:popOverPosition.y,
-            //transform:"translate(-100%,-50%)",
+            left:popOverPosition.arrowX,
+            top:popOverPosition.arrowY,
             transform
         }
+    }
+
+    function getPopOverStyle():CSSProperties | undefined {
+        const PADDING = 120;
+        if(!popOverPosition || !anchorPosition) return
+        let paddingLeft,paddingRight
+        const deltaX = popOverPosition.flipLeft?-PADDING:PADDING
+        const transform = popOverPosition.flipLeft?"translate(-100%,-50%)":`translate(${anchorPosition.width}px,-50%)`
+        if(popOverPosition.flipLeft) paddingRight = PADDING
+        else paddingLeft = PADDING
+        return {
+            //backgroundColor:"red",
+            left:popOverPosition.x + deltaX,
+            top:popOverPosition.y,
+            //transform:"translate(-100%,-50%)",
+            transform//,
+           // paddingRight,
+           // paddingLeft
+        }
+    }
+
+    function getArrowClassName():string {
+        return popOverPosition?.flipLeft?styles["arrow-right"]:styles["arrow-left"]
     }
 
     function renderPopOver(){
@@ -179,11 +227,21 @@ export default function Index(){
                     <PreviewWithData id={hoveredElement} />
                 </div>
             )
+     /*       render = (
+                <div>
+                    <div style={{width:300,height:300,backgroundColor:"red"}}></div>
+                </div>
+            )*/
         }
         return (
-            <div ref={popoverRef} className={styles["popover-container"]}  style={getPopOverStyle()}>
-                {render}
-            </div>
+            <>
+                {false && <div className={classnames(styles.arrow,getArrowClassName())} style={getArrowStyle()}></div>}
+                <div ref={popoverRef} className={styles["popover-container"]}  style={getPopOverStyle()}>
+
+                    {render}
+                </div>
+            </>
+
         )
     }
 

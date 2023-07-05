@@ -26,7 +26,7 @@ export async function GET(request: NextRequest, context: { params }):Promise<Nex
     const collection = animalsDB.collection<ElementDetails>("cats")
 
 
-    await new Promise(resolve=>setTimeout(resolve,250))
+ //   await new Promise(resolve=>setTimeout(resolve,250))
     const id = context.params.id as string
 
     const result =  await  collection.findOne({_id:id} as Filter<any>)

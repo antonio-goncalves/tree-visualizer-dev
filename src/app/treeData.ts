@@ -1,4 +1,4 @@
-import {TreeElement} from "@/Tree";
+import {TreeElement} from "@/app/demo/components/Tree";
 
 const treeData:TreeElement ={
     name:"Felidae",

@@ -18,10 +18,32 @@
 .container {
     padding:0 60px;
     border:1px solid green;
-    overflow: hidden;
     position:relative;
+    overflow: hidden;
 }
 
+.arrow {
+    position:absolute;
+}
+$arrow-size: 80px;
+
+.arrow-left {
+    width: 0;
+    height: 0;
+    border-top: #{$arrow-size} solid transparent;
+    border-bottom: #{$arrow-size} solid transparent;
+
+    border-right:#{$arrow-size} solid blue;
+}
+
+.arrow-right {
+    width: 0;
+    height: 0;
+    border-top: #{$arrow-size} solid transparent;
+    border-bottom: #{$arrow-size} solid transparent;
+
+    border-left: #{$arrow-size} solid green;
+}
 $breakpoint:map-get($grid-breakpoints,"md");
 
 $max-width:$breakpoint - 1;

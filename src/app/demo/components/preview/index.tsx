@@ -2,7 +2,7 @@
 import classnames from 'classnames'
 import './index.scss'
 
-
+import styles from './index.module.scss'
 import Image from "next/image";
 import {ElementPreview} from "@/app/demo/types";
 interface  PopoverProps {
@@ -48,6 +48,7 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
         }
         if(!data) return null
         const {description,title,image} = data
+        const paragraphs = description.split("\n")
         return (
             <>
                 <h1>{title}</h1>
@@ -60,10 +61,17 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
                         src={image.src}
                     />
                 </div>
+                <div className={styles.description}>
+                    {
+                        paragraphs.map((d,i)=>(
+                            <p key={i} className={classnames({"mb-0":i===paragraphs.length-1})}>
+                                {d}
+                            </p>
+                        ))
+                    }
+                </div>
 
-                <p className={"mb-0"}>
-                    {description}
-                </p>
+
             </>
         )
     }

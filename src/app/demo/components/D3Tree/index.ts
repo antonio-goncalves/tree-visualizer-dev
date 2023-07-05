@@ -1,14 +1,14 @@
 import * as d3 from 'd3'
-import {TreeElement} from "@/Tree";
+import {TreeElement} from "@/app/demo/components/Tree";
 import {DefaultLinkObject, HierarchyLink, HierarchyNode, Link} from "d3";
 
 interface D3TreeOptions {
-    onNodeClick?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement)=>void,
-    onNodeMouseOver?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement)=>void,
-    onNodeMouseEnter?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement)=>void,
-    onNodeMouseLeave?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement)=>void,
-    onNodeFocusIn?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement)=>void,
-    onNodeFocusOut?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement)=>void,
+    onNodeClick?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeMouseOver?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeMouseEnter?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeMouseLeave?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeFocusIn?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeFocusOut?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
     width?:number,
     leftPadding?:number,
     rightPadding?:number
@@ -157,32 +157,33 @@ export default function D3Tree(data:TreeElement,svgEl:SVGSVGElement,options?:D3T
                 //options?.onNodeMouseOver?.(el)
             }
         })
-        .on("click",(ev,el)=>{
+        .on("click",(ev:MouseEvent,el)=>{
             const element = ev.currentTarget as HTMLAnchorElement
-            options?.onNodeClick?.(el,element)
+            console.log(ev.target)
+            options?.onNodeClick?.(el,element,ev)
         })
-        .on("mouseover",(ev,el)=>{
+        .on("mouseover",(ev:MouseEvent,el)=>{
             const element = ev.currentTarget as HTMLAnchorElement
-           options?.onNodeMouseOver?.(el,element)
+           options?.onNodeMouseOver?.(el,element,ev)
 
         })
-        .on("mouseenter",   (ev,el)=>{
+        .on("mouseenter",   (ev:MouseEvent,el)=>{
             const element = ev.currentTarget as HTMLAnchorElement
-            options?.onNodeMouseEnter?.(el,element)
+            options?.onNodeMouseEnter?.(el,element,ev)
             nodeFocusIn(ev)
         })
-        .on("mouseleave",(ev,el)=>{
+        .on("mouseleave",(ev:MouseEvent,el)=>{
             const element = ev.currentTarget as HTMLAnchorElement
-            options?.onNodeMouseLeave?.(el,element)
+            options?.onNodeMouseLeave?.(el,element,ev)
             nodeFocusOut(ev)
-        }).on("focusin",(ev,el)=>{
+        }).on("focusin",(ev:MouseEvent,el)=>{
             const element = ev.currentTarget as HTMLAnchorElement
-            options?.onNodeFocusIn?.(el,element)
+            options?.onNodeFocusIn?.(el,element,ev)
             nodeFocusIn(ev)
         })
-        .on("focusout",(ev,el)=>{
+        .on("focusout",(ev:MouseEvent,el)=>{
             const element = ev.currentTarget as HTMLAnchorElement
-            options?.onNodeFocusOut?.(el,element)
+            options?.onNodeFocusOut?.(el,element,ev)
             nodeFocusOut(ev)
         })
 

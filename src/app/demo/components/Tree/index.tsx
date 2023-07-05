@@ -2,7 +2,7 @@
 import React, { FC, ReactElement } from 'react'
 import {debounce} from 'lodash';
 import {useEffect, useRef} from "react";
-import D3Tree from "@/D3Tree";
+import D3Tree from "@/app/demo/components/D3Tree";
 import {HierarchyNode} from "d3";
 import styles from './index.module.css'
 export interface TreeElement {
@@ -15,12 +15,12 @@ export interface TreeElement {
 
 export interface TreeProps {
     treeElement:TreeElement,
-    onNodeClick?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement)=>void,
-    onNodeMouseOver?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement)=>void,
-    onNodeMouseEnter?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement)=>void,
-    onNodeMouseLeave?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement)=>void,
-    onNodeFocusIn?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement)=>void,
-    onNodeFocusOut?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement)=>void,
+    onNodeClick?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeMouseOver?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeMouseEnter?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeMouseLeave?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeFocusIn?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeFocusOut?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
     resizeDebounceMS?:number,
     padding?:number,
     leftPadding?:number,
