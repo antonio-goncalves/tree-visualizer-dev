@@ -151,7 +151,7 @@ export default function D3Tree(data:TreeElement,svgEl:SVGSVGElement,options?:D3T
         .on("keydown",(event,el)=>{
             if(event.key === "Enter"){
                 const element = event.currentTarget as HTMLAnchorElement
-                options?.onNodeClick?.(el,element)
+                options?.onNodeClick?.(el,element,event)
             }
             if(event.key ==="Tab"){
                 //options?.onNodeMouseOver?.(el)

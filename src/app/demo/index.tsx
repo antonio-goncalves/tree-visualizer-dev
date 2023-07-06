@@ -6,13 +6,18 @@ import previewStyles from '/src/app/demo/components/preview/index.module.scss'
 
 import Tree, {TreeElement} from "@/app/demo/components/Tree";
 import {CSSProperties, useEffect, useRef, useState} from "react";
-import treeData from '../treeData'
+import _treeData from '../treeData'
 import {HierarchyNode} from "d3";
 import {FloatingArrow, flip, useFloating, arrow, detectOverflow, shift, autoPlacement} from "@floating-ui/react";
 import Preview from "@/app/demo/components/preview";
 import PreviewWithData from "@/app/demo/components/previewWithData";
 import {getNumberFromCSSString} from "@/app/demo/components/webUtils";
 import classnames from "classnames";
+import useSWR from "swr";
+import {ElementPreview} from "@/app/demo/types";
+import TreeData from "../treeData";
+
+
 
 const popOverWidth = getNumberFromCSSString(previewStyles.popOverWidth);
 
@@ -30,14 +35,29 @@ interface AnchorPosition {
     width:number,
     height:number
 }
+const fetcher = (url:string) => fetch(url).then((res) => {
 
-export default function Index(){
+    if(res.status === 404){
+        throw "Element not found"
+    }
+    return res.json()
+})
+
+interface IndexProps {
+    treeData:TreeElement
+}
+
+export default function Index({treeData}:IndexProps){
     const arrowRef = useRef(null);
     const popoverRef = useRef<HTMLDivElement | null>(null)
     const [hoveredElement,setHoveredElement] = useState<string | null>(null)
     const [selectedElement,setSelectedElement] = useState<string | null>(null)
     const [popOverPosition,setPopOverPosition] = useState<PopOverPosition | null>()
     const [anchorPosition,setAnchorPosition] = useState<AnchorPosition | null>()
+
+  //  const {data,error} = useSWR<TreeElement>("/elements/tree", fetcher)
+
+
 
     useEffect(()=>{
         window.addEventListener("scroll",(e)=>{
@@ -71,7 +91,7 @@ export default function Index(){
         }
 
     },[popoverRef,anchorPosition])
-
+  //  if(!data) return "Loading"
    /* const {refs, floatingStyles,update,context} = useFloating({
 
 
@@ -133,7 +153,7 @@ export default function Index(){
 
         const domRect = el.getBoundingClientRect()
         const newPopoverPosition = getPopOverPosition(domRect)
-
+        if(!newPopoverPosition) return
         const {x,y,flipLeft,arrowY,arrowX} = newPopoverPosition
         setAnchorPosition({
             x:domRect.x,
@@ -154,7 +174,7 @@ export default function Index(){
 
         setHoveredElement(e.data.id)
     }
-    function onNodeMouseLeave(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev){
+    function onNodeMouseLeave(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:any){
 
         const element = ev.toElement as HTMLElement
         console.log(styles.arrow,element)
@@ -165,6 +185,7 @@ export default function Index(){
     }
 
     function unsetHoveredElement(){
+   
         setPopOverPosition(null)
         setHoveredElement(null)
     }
@@ -185,12 +206,12 @@ export default function Index(){
             onNodeMouseLeave={onNodeMouseLeave}
             onNodeFocusIn={onNodeMouseEnter}
             onNodeFocusOut={onNodeMouseLeave}
-            treeElement={treeData}/>
+            treeElement={treeData!}/>
        )
     }
 
-    function getAnchorMargin():number | undefined{
-        if(!anchorPosition) return
+    function getAnchorMargin():number {
+        if(!anchorPosition) return 0
         return anchorPosition.height/2
     }
 
@@ -235,15 +256,9 @@ export default function Index(){
         if(hoveredElement){
             render =(
                 <div className={styles.popover}>
-                    {/*<FloatingArrow className={styles.arrow} width={20} height={10} ref={arrowRef}/>*/}
                     <PreviewWithData id={hoveredElement} />
                 </div>
             )
-     /*       render = (
-                <div>
-                    <div style={{width:300,height:300,backgroundColor:"red"}}></div>
-                </div>
-            )*/
         }
         return (
             <>

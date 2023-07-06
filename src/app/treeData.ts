@@ -3,10 +3,10 @@ import {TreeElement} from "@/app/demo/components/Tree";
 const treeData:TreeElement ={
     name:"Felidae",
     id:"felidae",
-    children:[
+     children:[
         {
             "name": "Pantherinae",
-            "children": [
+           /* "children": [
                 {
                     "name": "Panthera",
                     "children": [
@@ -47,10 +47,10 @@ const treeData:TreeElement ={
                         }
                     ]
                 }
-            ],
+            ],*/
             "id": "pantherinae"
         },
-        {
+       /* {
             "id": "felinae",
             "name": "Felinae",
             "children": [
@@ -263,7 +263,7 @@ const treeData:TreeElement ={
                     "id": "felis"
                 }
             ]
-        }
+        }*/
     ]
 }
 

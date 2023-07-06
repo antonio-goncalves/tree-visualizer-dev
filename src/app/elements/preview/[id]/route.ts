@@ -21,13 +21,13 @@ interface Error {
     msg:string
 }
 
-export async function GET(request: NextRequest, context: { params }):Promise<NextResponse<ElementPreview | Error>> {
+export async function GET(request: NextRequest, context: { params :{id:string}}):Promise<NextResponse<ElementPreview | Error>> {
     await mongoClient.connect()
     const collection = animalsDB.collection<ElementDetails>("cats")
 
 
  //   await new Promise(resolve=>setTimeout(resolve,250))
-    const id = context.params.id as string
+    const id = context.params.id
 
     const result =  await  collection.findOne({_id:id} as Filter<any>)
     if(!result) {
