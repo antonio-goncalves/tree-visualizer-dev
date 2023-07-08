@@ -297,7 +297,6 @@ export default function Index({treeData}:IndexProps){
     return (
         <div className={styles.container}>
 
-            {renderInfo()}
             {renderPopOver()}
             {renderTree()}
         </div>

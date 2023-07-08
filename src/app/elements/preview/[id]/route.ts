@@ -39,10 +39,10 @@ export async function GET(request: NextRequest, context: { params :{id:string}})
             status:404
         })
     }
-
+    const image = result.images.find(el=>el.main)
     return NextResponse.json({
         title:result.title,
-        image:elementPreview.image,
+        image:image ,
         description:result.description,
         references:result.references
     })

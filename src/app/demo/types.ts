@@ -19,6 +19,6 @@ export interface ElementDetails {
 export interface ElementPreview {
     title:string,
     description:string,
-    image:ElementImage,
+    image?:ElementImage,
     references:Reference[]
 }

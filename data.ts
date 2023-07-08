@@ -1,7 +1,8 @@
 export interface ElementImage {
     src:string,
     alt:string,
-    reference:Reference
+    reference:Reference,
+    main?:boolean
 }
 
 export interface Reference {

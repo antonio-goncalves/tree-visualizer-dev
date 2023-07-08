@@ -4,7 +4,11 @@ const nextConfig = {
          remotePatterns:[
               {
                    hostname:"upload.wikimedia.org"
-              }
+              },
+             {
+                 hostname:"static.antonio-goncalves.com"
+             }
+
          ]
      }
 }

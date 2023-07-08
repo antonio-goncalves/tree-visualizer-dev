@@ -5,6 +5,7 @@ import './index.scss'
 import styles from './index.module.scss'
 import Image from "next/image";
 import {ElementPreview} from "@/app/demo/types";
+import {image} from "d3";
 interface  PopoverProps {
     data?:ElementPreview,
     isLoading?:boolean,
@@ -36,7 +37,22 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
             </div>
         )
     }
+    function renderImage(){
+        const image = data?.image
+        if(!image) return null
+        return (
+            <div className={classnames("image-container","mb-2","rounded","overflow-hidden")}>
 
+                <Image
+                    style={{objectFit: "cover"}}
+                    sizes={"328px"}
+                    fill={true}
+                    alt={image.alt}
+                    src={image.src}
+                />
+            </div>
+        )
+    }
     function renderInfo(){
         if(failed){
             return (
@@ -47,20 +63,12 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
             return renderPlaceholders()
         }
         if(!data) return null
-        const {description,title,image} = data
+        const {description,title} = data
         const paragraphs = description.split("\n")
         return (
             <>
                 <h1>{title}</h1>
-                <div className={classnames("image-container","mb-2")}>
-                    <Image
-                        style={{objectFit:"cover"}}
-
-                        fill={true}
-                        alt={image.alt}
-                        src={image.src}
-                    />
-                </div>
+                {renderImage()}
                 <div className={styles.description}>
                     {
                         paragraphs.map((d,i)=>(
