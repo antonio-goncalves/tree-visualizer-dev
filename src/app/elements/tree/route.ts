@@ -1,12 +1,10 @@
 import * as mongoDB from "mongodb";
+import {NextRequest, NextResponse} from "next/server";
+import {ElementDetails} from "@/app/demo/types";
+import {TreeElement} from "@/app/demo/components/Tree";
 
 const uri = process.env.MONGO_URI || "mongodb://localhost:27017?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000";
 
-import {NextRequest, NextResponse} from "next/server";
-import {ElementPreview} from "@/app/demo/types";
-import {ElementDetails} from "../../../../data";
-import {Filter} from "mongodb";
-import {TreeElement} from "@/app/demo/components/Tree";
 const mongoClient = new mongoDB.MongoClient(uri);
 const animalsDB = mongoClient.db("animals");
 
@@ -49,12 +47,11 @@ export async function getTree():Promise<TreeElement | undefined>{
 
     }
 
-    const tree = {
+    return {
         ...topElement,
-        children:getChildElements(topElement)
+        children: getChildElements(topElement)
 
     }
-    return tree
 }
 
 

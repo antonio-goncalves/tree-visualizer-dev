@@ -59,12 +59,7 @@ export default function Index({treeData}:IndexProps){
 
 
 
-    useEffect(()=>{
-        window.addEventListener("scroll",(e)=>{
-            console.log(e)
-           e.preventDefault()
-        })
-    },[])
+
     useEffect(()=>{
 
         if(!popoverRef.current && !anchorPosition) return
@@ -118,7 +113,7 @@ export default function Index({treeData}:IndexProps){
 
         const popoverHeight = popoverRef.current?.offsetHeight || 0
         const popoverWidth = popOverWidth || popoverRef.current?.offsetWidth || 0
-        console.log(popoverWidth,popoverHeight)
+
        // if(popoverWidth === 0 || popoverHeight ===0 ) return
         let flipLeft:boolean = false;
         const x = anchorPosition.x + window.scrollX
@@ -148,9 +143,6 @@ export default function Index({treeData}:IndexProps){
     function onNodeMouseEnter(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement){
        // refs.setReference(el)
 
-
-
-
         const domRect = el.getBoundingClientRect()
         const newPopoverPosition = getPopOverPosition(domRect)
         if(!newPopoverPosition) return
@@ -176,8 +168,8 @@ export default function Index({treeData}:IndexProps){
     }
     function onNodeMouseLeave(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:any){
 
-        const element = ev.toElement as HTMLElement
-        console.log(styles.arrow,element)
+        const element = ev.relatedTarget  as HTMLDivElement
+
         if(element?.classList?.contains(styles.arrow)){
             return
         }
@@ -185,7 +177,7 @@ export default function Index({treeData}:IndexProps){
     }
 
     function unsetHoveredElement(){
-   
+        //return
         setPopOverPosition(null)
         setHoveredElement(null)
     }
@@ -217,12 +209,20 @@ export default function Index({treeData}:IndexProps){
 
     function getArrowStyle():CSSProperties | undefined {
         if(!popOverPosition || !anchorPosition) return
+        const PADDING = 16
+        const deltaX = popOverPosition.flipLeft?PADDING:-PADDING
+        let paddingLeft, paddingRight
+        if(popOverPosition.flipLeft) paddingRight = PADDING
+        else paddingLeft = PADDING
         const yTransform = `calc(-50% + ${getAnchorMargin()}px)`
         const transform = popOverPosition.flipLeft?`translate(-100%, ${yTransform})`:`translate(${anchorPosition.width}px,${yTransform})`
         return {
-            left:popOverPosition.arrowX,
+            left:popOverPosition.arrowX + deltaX,
             top:popOverPosition.arrowY,
-            transform
+            transform,
+            paddingRight,
+            paddingLeft,
+           // backgroundColor:"red"
         }
     }
 
@@ -235,7 +235,6 @@ export default function Index({treeData}:IndexProps){
         const transform = popOverPosition.flipLeft?`translate(-100%,${yTransform})`:`translate(${anchorPosition.width}px,${yTransform})`
         if(popOverPosition.flipLeft) paddingRight = PADDING
         else paddingLeft = PADDING
-        console.log(popOverPosition.arrowY,popOverPosition.y)
         return {
             //backgroundColor:"red",
             left:popOverPosition.x + deltaX,
@@ -263,7 +262,7 @@ export default function Index({treeData}:IndexProps){
         return (
             <>
                 {renderArrow()}
-                <div ref={popoverRef} onMouseLeave={onMouseLeave} className={styles["popover-container"]}  style={getPopOverStyle()}>
+                <div ref={popoverRef} onMouseLeave={onMouseLeave} className={classnames(styles["popover-container"],styles["hide-on-mobile"])}  style={getPopOverStyle()}>
 
                     {render}
                 </div>
@@ -274,7 +273,7 @@ export default function Index({treeData}:IndexProps){
 
     function renderArrow(){
         if(!hoveredElement) return null
-        return <div onMouseLeave={onMouseLeave} className={classnames(styles.arrow, getArrowClassName())} style={getArrowStyle()}/>
+        return <div onMouseLeave={onMouseLeave} className={classnames(styles.arrow, getArrowClassName(),styles["hide-on-mobile"])} style={getArrowStyle()}/>
     }
 
     function onMouseLeave(e:React.MouseEvent){

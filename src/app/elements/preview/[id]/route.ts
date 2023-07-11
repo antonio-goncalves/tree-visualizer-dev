@@ -1,17 +1,8 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {ElementPreview} from "@/app/demo/types";
+import {ElementDetails, ElementPreview} from "@/app/demo/types";
 import * as mongoDB  from  "mongodb";
 import {Filter} from "mongodb";
-import {ElementDetails} from "../../../../../data";
-const elementPreview:ElementPreview = {
-    title:"Domestic cat",
-    description:" The cat (Felis catus) is a domestic species of small carnivorous mammal.[1][2] It is the only domesticated species in the family Felidae and is commonly referred to as the domestic cat",
-    image:{
-        src:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Felis_catus-cat_on_snow.jpg/2560px-Felis_catus-cat_on_snow.jpg",
-        alt:"Domestic cat"
-    },
-    references:[]
-}
+
 const uri = process.env.MONGO_URI || "mongodb://localhost:27017?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000";
 
 const mongoClient = new mongoDB.MongoClient(uri);
@@ -39,7 +30,7 @@ export async function GET(request: NextRequest, context: { params :{id:string}})
             status:404
         })
     }
-    const image = result.images.find(el=>el.main)
+    const image = result.images.find(el=>el.preview)
     return NextResponse.json({
         title:result.title,
         image:image ,

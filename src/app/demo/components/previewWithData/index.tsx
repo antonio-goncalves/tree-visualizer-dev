@@ -12,7 +12,6 @@ const fetcher = (url:string) => fetch(url).then((res) => {
 export default function PreviewWithData({id}: { id:string }){
 
     const {data,error} = useSWR<ElementPreview>(`/elements/preview/${id}`, fetcher)
-    console.log(data)
 
 
     if(error){

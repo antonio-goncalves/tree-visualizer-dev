@@ -40,20 +40,23 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
     function renderImage(){
         const image = data?.image
         if(!image) return null
+        console.log("aspectRatio",image.aspectRatio)
         return (
-            <div className={classnames("image-container","mb-2","rounded","overflow-hidden")}>
+            <div style={{aspectRatio:image.aspectRatio}} className={classnames("image-container","mb-2","rounded","overflow-hidden")}>
 
                 <Image
                     style={{objectFit: "cover"}}
                     sizes={"328px"}
                     fill={true}
                     alt={image.alt}
+
                     src={image.src}
                 />
             </div>
         )
     }
     function renderInfo(){
+
         if(failed){
             return (
                 <p className={"mb-0 text-danger text-center"}>Failed while loading the data</p>
@@ -65,14 +68,22 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
         if(!data) return null
         const {description,title} = data
         const paragraphs = description.split("\n")
+
+        //@ts-ignore
+        const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
+        let descriptionStyle,paragraphClassName
+        if(isSafari){
+            descriptionStyle = {WebkitLineClamp:Math.round(8/paragraphs.length)}
+            paragraphClassName = "overflow-hidden"
+        }
         return (
             <>
                 <h1>{title}</h1>
                 {renderImage()}
-                <div className={styles.description}>
+                <div style={descriptionStyle} className={styles.description}>
                     {
                         paragraphs.map((d,i)=>(
-                            <p key={i} className={classnames({"mb-0":i===paragraphs.length-1})}>
+                            <p key={i} className={classnames(paragraphClassName,{"mb-0":i===paragraphs.length-1})}>
                                 {d}
                             </p>
                         ))
