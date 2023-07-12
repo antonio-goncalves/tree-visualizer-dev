@@ -9,12 +9,19 @@ export interface TreeElement {
     id:string ,
     name:string,
     children?:TreeElement[],
-    color?:string
+    color?:string,
+    type?:string
 }
 
+export interface TreeElementType {
+    id:string,
+    title?:string,
+    color:string
+}
 
 export interface TreeProps {
     treeElement:TreeElement,
+    treeElementTypes?:TreeElementType[],
     onNodeClick?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
     onNodeMouseOver?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
     onNodeMouseEnter?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
@@ -33,7 +40,20 @@ const DEFAULT_DEBOUNCE_MS = 200;
 
 
 
-export default function Tree({treeElement,onNodeClick,resizeDebounceMS=DEFAULT_DEBOUNCE_MS,padding,rightPadding,leftPadding,onNodeMouseOver,onNodeMouseEnter,onNodeMouseLeave,onNodeFocusOut,onNodeFocusIn}:TreeProps){
+export default function Tree({
+     treeElement,
+     onNodeClick,
+     resizeDebounceMS=DEFAULT_DEBOUNCE_MS,
+     padding,
+     rightPadding,
+     leftPadding,
+     onNodeMouseOver,
+     onNodeMouseEnter,
+     onNodeMouseLeave,
+     onNodeFocusOut,
+     onNodeFocusIn,
+    treeElementTypes
+}:TreeProps){
     const ref = useRef<HTMLDivElement | null>(null)
     const svgRef = useRef<SVGSVGElement | null>(null)
 
@@ -43,7 +63,10 @@ export default function Tree({treeElement,onNodeClick,resizeDebounceMS=DEFAULT_D
         let remove:(()=>void) | null = null;
         function getD3Tree():void{
             remove?.()
-            remove = D3Tree(treeElement,svgRef.current!,{
+            remove = D3Tree({
+                data:treeElement,
+                svgEl:svgRef.current!,
+                types:treeElementTypes,
                 onNodeClick,
                 onNodeMouseOver,
                 onNodeMouseEnter,

@@ -12,6 +12,7 @@ export interface ElementDetails {
     _id:string,
     parent?:string,
     title:string,
+    lineage?:string,
     website:string,
     description:string,
     images:ElementImage[],

@@ -6,6 +6,7 @@ import styles from './index.module.scss'
 import Image from "next/image";
 import {ElementPreview} from "@/app/demo/types";
 import {image} from "d3";
+import {CSSProperties} from "react";
 interface  PopoverProps {
     data?:ElementPreview,
     isLoading?:boolean,
@@ -71,7 +72,8 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
 
         //@ts-ignore
         const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
-        let descriptionStyle,paragraphClassName
+        let descriptionStyle:CSSProperties | undefined
+        let paragraphClassName:string | undefined
         if(isSafari){
             descriptionStyle = {WebkitLineClamp:Math.round(8/paragraphs.length)}
             paragraphClassName = "overflow-hidden"

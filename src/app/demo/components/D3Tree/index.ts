@@ -1,8 +1,11 @@
 import * as d3 from 'd3'
-import {TreeElement} from "@/app/demo/components/Tree";
+import {TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 import {DefaultLinkObject, HierarchyLink, HierarchyNode, Link} from "d3";
 
 interface D3TreeOptions {
+    data:TreeElement,
+    types?:TreeElementType[],
+    svgEl:SVGSVGElement,
     onNodeClick?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
     onNodeMouseOver?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
     onNodeMouseEnter?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
@@ -24,7 +27,9 @@ const CIRCLE_RADIUS_OVER = 7;
 // Copyright 2021 Observable, Inc.
 // Released under the ISC license.
 // https://observablehq.com/@d3/tree
-export default function D3Tree(data:TreeElement,svgEl:SVGSVGElement,options?:D3TreeOptions):()=>void {
+export default function D3Tree(options:D3TreeOptions):()=>void {
+    const {data,svgEl,types} = options
+    const typesHashmap:{[k:string]:TreeElementType} = types?.reduce((acc:any,val:TreeElementType)=>({...acc,[val.id]:val}),{}) || {}
 
     const tree = d3.tree // layout algorithm (typically d3.tree or d3.cluster)
     const sort = undefined // how to sort nodes prior to layout (e.g., (a, b) => d3.descending(a.height, b.height))
@@ -34,9 +39,9 @@ export default function D3Tree(data:TreeElement,svgEl:SVGSVGElement,options?:D3T
     // height= undefined, // outer height, in pixels
 
     const fill = "#999" // fill for nodes
-    const stroke = "#555" // stroke for links
+    const stroke = "#BBBBBB"//"#555" // stroke for links
     const strokeWidth = 1.5 // stroke width for links
-    const strokeOpacity = 0.4 // stroke opacity for links
+    const strokeOpacity =1// 0.4 // stroke opacity for links
     const haloWidth = 3 // padding around the labels
     const curve = d3.curveBumpX // curve for the link
 
@@ -105,6 +110,14 @@ export default function D3Tree(data:TreeElement,svgEl:SVGSVGElement,options?:D3T
        // .attr("font-size", 14);
 
 
+    function getColorFromTreeElement(treeElement:TreeElement):string | undefined{
+        if(treeElement.color) return treeElement.color
+        if(treeElement.type){
+            const type = typesHashmap[treeElement.type]
+            if(type) return type.color
+        }
+    }
+
     //@ts-ignore
     const lines = svg.append("g").attr("fill", "none")
 
@@ -120,11 +133,8 @@ export default function D3Tree(data:TreeElement,svgEl:SVGSVGElement,options?:D3T
             .x((d:any) => d.y) // eslint-disable-line no-use-before-define
             .y((d:any) => d.x)) // eslint-disable-line no-use-before-define
         .attr("stroke", (d:any)=>{
-            const source = d.source
-            const color = source.data.color
-
-
-            return color
+            const color = getColorFromTreeElement(d.target.data)
+            return color || stroke
         })
 
     function nodeFocusIn(ev: MouseEvent){
@@ -188,7 +198,10 @@ export default function D3Tree(data:TreeElement,svgEl:SVGSVGElement,options?:D3T
         })
 
     node.append("circle")
-        .attr("fill", d => fill)
+        .attr("fill", d => {
+            const color = getColorFromTreeElement(d.data)
+            return color || fill
+        })
         .attr("r", CIRCLE_RADIUS);
 
 

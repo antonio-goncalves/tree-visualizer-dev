@@ -4,7 +4,7 @@
 import styles from './index.module.scss'
 import previewStyles from '/src/app/demo/components/preview/index.module.scss'
 
-import Tree, {TreeElement} from "@/app/demo/components/Tree";
+import Tree, {TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 import {CSSProperties, useEffect, useRef, useState} from "react";
 import _treeData from '../treeData'
 import {HierarchyNode} from "d3";
@@ -45,9 +45,10 @@ const fetcher = (url:string) => fetch(url).then((res) => {
 
 interface IndexProps {
     treeData:TreeElement
+    treeElementTypes:TreeElementType[]
 }
 
-export default function Index({treeData}:IndexProps){
+export default function Index({treeData,treeElementTypes}:IndexProps){
     const arrowRef = useRef(null);
     const popoverRef = useRef<HTMLDivElement | null>(null)
     const [hoveredElement,setHoveredElement] = useState<string | null>(null)
@@ -198,7 +199,10 @@ export default function Index({treeData}:IndexProps){
             onNodeMouseLeave={onNodeMouseLeave}
             onNodeFocusIn={onNodeMouseEnter}
             onNodeFocusOut={onNodeMouseLeave}
-            treeElement={treeData!}/>
+            treeElement={treeData!}
+            treeElementTypes={treeElementTypes}
+
+           />
        )
     }
 

@@ -9,13 +9,13 @@ const mongoClient = new mongoDB.MongoClient(uri);
 const animalsDB = mongoClient.db("animals");
 
 export async function getTree():Promise<TreeElement | undefined>{
-    console.log("getTree")
+
     await mongoClient.connect()
     const collection = animalsDB.collection<ElementDetails>("cats")
 
-    const elements = await collection.find({}).project({title:1,_id:1,parent:1}).toArray()
+    const elements = await collection.find({}).project({title:1,_id:1,parent:1,lineage:1}).toArray()
 
-    const hm:{[k:string]:Array<{id:string,name:string}>} = {}
+    const hm:{[k:string]:Array<{id:string,name:string,type:string}>} = {}
 
     for(const element of elements){
         if(!element.parent) continue
@@ -23,7 +23,8 @@ export async function getTree():Promise<TreeElement | undefined>{
         hm[element.parent].push(
             {
                 id:element._id,
-                name:element.title
+                name:element.title,
+                type:element.lineage
             }
         )
     }
@@ -31,7 +32,8 @@ export async function getTree():Promise<TreeElement | undefined>{
     if(!_topElement) return
     const topElement = {
         id:_topElement._id,
-        name:_topElement.title
+        name:_topElement.title,
+        type:_topElement.lineage
     }
     function getChildElements(element:TreeElement):TreeElement[] | undefined{
 
