@@ -1,8 +1,13 @@
 
 
-
+$text-color:#575e64;
+$body-color:$text-color;
+svg text {
+  fill:$text-color;
+}
 @import "/node_modules/bootstrap/scss/bootstrap";
 $ph-gutter:0;
 $ph-border:none;//1px solid red;
 $ph-bg:$light;
+
 @import "/node_modules/placeholder-loading/src/scss/placeholder-loading";
