@@ -17,7 +17,7 @@
 
 .container {
     padding:0 60px;
-    border:1px solid green;
+    //border:1px solid green;
     position:relative;
     overflow: hidden;
 }
@@ -26,6 +26,13 @@
     position:absolute;
 }
 $arrow-size: 15px;
+
+.circle {
+    width:10px;
+    height: 10px;
+    border-radius: 10px;
+    background-color: black;
+}
 
 .arrow-left {
     width: 0;
@@ -47,6 +54,10 @@ $arrow-size: 15px;
 $breakpoint:map-get($grid-breakpoints,"md");
 
 $max-width:$breakpoint - 1;
+
+.types-legend {
+    white-space: nowrap;
+}
 @media (max-width:$max-width) {
     .container {
         padding:0;

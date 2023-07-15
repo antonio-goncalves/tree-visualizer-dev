@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {ElementDetails, ElementPreview} from "@/app/demo/types";
+import {ElementDetails, ElementImage, ElementPreview} from "@/app/demo/types";
 import * as mongoDB  from  "mongodb";
 import {Filter} from "mongodb";
 
@@ -20,8 +20,21 @@ export async function GET(request: NextRequest, context: { params :{id:string}})
  //   await new Promise(resolve=>setTimeout(resolve,250))
     const id = context.params.id
 
-    const result =  await  collection.findOne({_id:id} as Filter<any>)
-    if(!result) {
+    const arr =  await  collection.aggregate([
+
+        {$match:{_id:id}},
+        {$lookup:{
+                from:"lineages",
+                localField:"lineage",
+                foreignField:"_id",
+                as:"_lineage"
+
+            }}
+
+    ]).toArray()
+
+
+    if(arr.length === 0) {
 
 
         return NextResponse.json({
@@ -30,10 +43,13 @@ export async function GET(request: NextRequest, context: { params :{id:string}})
             status:404
         })
     }
-    const image = result.images.find(el=>el.preview)
+    const result = arr[0]
+    const image = result.images.find((el:ElementImage)=>el.preview)
     return NextResponse.json({
         title:result.title,
         image:image ,
+        subTitle:result._lineage?.[0]?.title,
+        subTitleColor:result._lineage?.[0]?.color,
         description:result.description,
         references:result.references
     })

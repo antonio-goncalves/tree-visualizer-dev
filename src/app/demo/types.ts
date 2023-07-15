@@ -19,7 +19,11 @@ export interface ElementDetails {
     references:Reference[]
 }
 
-
+export interface Lineage {
+    _id : string,
+    color : string,
+    title : string
+}
 
 export interface Reference {
     url:string,
@@ -29,6 +33,8 @@ export interface Reference {
 
 export interface ElementPreview {
     title:string,
+    subTitle?:string,
+    subTitleColor?:string,
     description:string,
     image?:ElementImage,
     references:Reference[]
