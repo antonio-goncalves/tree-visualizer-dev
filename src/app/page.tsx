@@ -4,6 +4,7 @@ import {useRef} from "react";
 import Index from "@/app/demo";
 import {getTree} from "@/app/elements/tree/route";
 import {getLineages} from "@/app/elements/lineage/methods";
+import Modal from "@/app/demo/components/Modal";
 
 
 export default async function Home() {
@@ -18,6 +19,7 @@ export default async function Home() {
         </main>)
     }
 
+    //return <Modal/>
   return (
     <main>
 

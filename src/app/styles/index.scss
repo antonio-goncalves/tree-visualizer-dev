@@ -1,8 +1,10 @@
 
-
+$primary: #ED7117;
 $text-color:#575e64;
 $body-color:$text-color;
-svg text {
+$body-bg:#f9f9f9;
+$enable-smooth-scroll:false;
+        svg text {
   fill:$text-color;
 }
 @import "/node_modules/bootstrap/scss/bootstrap";
