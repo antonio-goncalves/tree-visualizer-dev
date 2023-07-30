@@ -22,7 +22,7 @@ export default function ElementDetailsWithData({id,treeElementTypes}: { id:strin
 
 
     if(data){
-        const type = treeElementTypes.find(el=>el.id === data.type)
+        const type = treeElementTypes?.find(el=>el.id === data.type)
 
        return (
            <ElementDetails
