@@ -15,6 +15,7 @@ export default class WebUtils {
         document.body.style.right = "0";
         document.body.style.bottom = "0";
         document.body.style.position = "fixed";
+        console.log("lockBodyScroll")
     }
 
     static unLockBodyScroll(){
@@ -30,5 +31,7 @@ export default class WebUtils {
         document.body.style.left =  "auto";
         document.body.style.right = "auto";
         document.body.style.bottom =  "auto";
+
+
     }
 }

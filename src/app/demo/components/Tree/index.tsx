@@ -31,7 +31,8 @@ export interface TreeProps {
     resizeDebounceMS?:number,
     padding?:number,
     leftPadding?:number,
-    rightPadding?:number
+    rightPadding?:number,
+    disableResizeEvent?:boolean
 
 }
 
@@ -52,47 +53,70 @@ export default function Tree({
      onNodeMouseLeave,
      onNodeFocusOut,
      onNodeFocusIn,
-    treeElementTypes
+    treeElementTypes,
+    disableResizeEvent
 }:TreeProps){
     const ref = useRef<HTMLDivElement | null>(null)
     const svgRef = useRef<SVGSVGElement | null>(null)
 
+    const removeRef = useRef<()=>void| undefined>()
+
+    const disableResizeEventRef = useRef<boolean | undefined>(disableResizeEvent)
     useEffect(()=>{
-        console.log("use effect")
+        disableResizeEventRef.current = disableResizeEvent
+    },[disableResizeEvent])
+
+    function getD3Tree():void{
+
+        const scrollY = window.scrollY
+        removeRef.current?.()
+        removeRef.current = D3Tree({
+            data:treeElement,
+            svgEl:svgRef.current!,
+            types:treeElementTypes,
+            onNodeClick,
+            onNodeMouseOver,
+            onNodeMouseEnter,
+            onNodeMouseLeave,
+            onNodeFocusIn,
+            onNodeFocusOut,
+            width:ref.current!.offsetWidth,
+            rightPadding,
+            leftPadding,
+            padding
+        })
+        console.log("scrollY",scrollY)
+        //@ts-ignore
+        window.scrollTo({top:scrollY,behavior:"instant"})
+        setTimeout(()=>{
+
+        },3000)
+
+    }
+
+    function onResize(){
+
+        getD3Tree()
+    }
+
+
+    useEffect(()=>{
+
+
+
         if(!svgRef.current || !ref.current) return
-        let remove:(()=>void) | null = null;
-        function getD3Tree():void{
-            remove?.()
-            remove = D3Tree({
-                data:treeElement,
-                svgEl:svgRef.current!,
-                types:treeElementTypes,
-                onNodeClick,
-                onNodeMouseOver,
-                onNodeMouseEnter,
-                onNodeMouseLeave,
-                onNodeFocusIn,
-                onNodeFocusOut,
-                width:ref.current!.offsetWidth,
-                rightPadding,
-                leftPadding,
-                padding
-            })
-        }
         getD3Tree();
-        const _getD3Tree = debounce(getD3Tree,resizeDebounceMS)
-        const resizeObserver = new ResizeObserver(_getD3Tree as ()=>void)
-
+        const _onResize = debounce(onResize,resizeDebounceMS)
+        const resizeObserver = new ResizeObserver(_onResize as ()=>void)
         resizeObserver.observe(ref.current!)
-
-
-
-
         return ()=>{
-            remove?.()
+            removeRef.current?.()
             resizeObserver.disconnect()
         }
     },[svgRef,ref,leftPadding,rightPadding,padding,treeElement])
+
+
+
 
     return (
         <div ref={ref} className={styles.container}>

@@ -42,7 +42,7 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
     function renderImage(){
         const image = data?.image
         if(!image) return null
-        console.log("aspectRatio",image.aspectRatio)
+
         return (
             <div style={{aspectRatio:image.aspectRatio}} className={classnames("image-container","mb-2","rounded","overflow-hidden")}>
 

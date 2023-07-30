@@ -1,7 +1,37 @@
+@import "../../../styles/variables";
 .modal {
+
   width: auto;
   height: auto;
-  margin: 20px;
+  margin:20px;
+  padding:0;
   max-width: none;
   max-height: none;
+  position: relative;
+  overflow: visible;
+}
+.content {
+  overflow: auto;
+  //margin: 20px;
+  width: auto;
+  height: 100%;
+  padding: 20px;
+}
+.close-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 24px;
+  height: 24px;
+  background-color: $primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  color:white;
+  transform: translate(50%,-50%);
+}
+.close-button:focus,
+.close-button:hover{
+  filter:brightness(1.05);
 }

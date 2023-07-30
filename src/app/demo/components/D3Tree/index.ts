@@ -169,7 +169,7 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
         })
         .on("click",(ev:MouseEvent,el)=>{
             const element = ev.currentTarget as HTMLAnchorElement
-            console.log(ev.target)
+
             options?.onNodeClick?.(el,element,ev)
         })
         .on("mouseover",(ev:MouseEvent,el)=>{

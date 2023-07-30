@@ -3,7 +3,7 @@
 
 import styles from './index.module.scss'
 import previewStyles from '/src/app/demo/components/preview/index.module.scss'
-
+import React from 'react'
 import Tree, {TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 import {CSSProperties, useEffect, useRef, useState} from "react";
 import _treeData from '../treeData'
@@ -16,7 +16,7 @@ import classnames from "classnames";
 import useSWR from "swr";
 import {ElementPreview} from "@/app/demo/types";
 import TreeData from "../treeData";
-
+import ElementDetailsModal from "@/app/demo/components/ElementDetailsModal";
 
 
 const popOverWidth = getNumberFromCSSString(previewStyles.popOverWidth);
@@ -55,6 +55,7 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
     const [selectedElement,setSelectedElement] = useState<string | null>(null)
     const [popOverPosition,setPopOverPosition] = useState<PopOverPosition | null>()
     const [anchorPosition,setAnchorPosition] = useState<AnchorPosition | null>()
+    const [disableResizeEvent,setDisableResizeEvent] = useState<boolean>(false)
 
   //  const {data,error} = useSWR<TreeElement>("/elements/tree", fetcher)
 
@@ -87,27 +88,13 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
         }
 
     },[popoverRef,anchorPosition])
-  //  if(!data) return "Loading"
-   /* const {refs, floatingStyles,update,context} = useFloating({
 
 
-        middleware:[
-            //shift({crossAxis:true}),
-           //   flip({fallbackPlacements:["bottom","left","right","bottom-end","left-end"]}),
-            shift(),
-            arrow({element:arrowRef})
-
-        ],
-
-    });*/
 
     function onNodeClick(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement){
 
         setSelectedElement(e.data.id)
 
-       /* createPopper(el,ref.current, {
-            placement: 'top',
-        })*/
     }
 
     function getPopOverPosition(anchorPosition:{x:number,y:number}):PopOverPosition | undefined{
@@ -163,9 +150,8 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
         })
 
 
-
-
         setHoveredElement(e.data.id)
+
     }
     function onNodeMouseLeave(e:HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:any){
 
@@ -195,6 +181,7 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
             onNodeMouseOver={(e,element)=>{
 
             }}
+            disableResizeEvent={!!selectedElement}
             onNodeMouseEnter={onNodeMouseEnter}
             onNodeMouseLeave={onNodeMouseLeave}
             onNodeFocusIn={onNodeMouseEnter}
@@ -297,13 +284,29 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
     }
 
 
+    function renderModal(){
+        if(!selectedElement) return null;
+        return (
+
+                <ElementDetailsModal elementId={selectedElement} isOpen={!!selectedElement} onClose={()=>{
+                    setSelectedElement(null)
+
+                    setHoveredElement(null)
+                }
+                }/>
+
+
+        )
+    }
 
 
 
     return (
         <div className={styles.container}>
+
             {renderPopOver()}
             {renderTree()}
+            {renderModal()}
         </div>
 
     )
