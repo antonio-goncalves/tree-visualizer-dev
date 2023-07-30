@@ -285,7 +285,6 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
         return (
 
                 <ElementDetailsModal
-                    setSelectedElement={setSelectedElement}
                     elementId={selectedElement}
                     isOpen={!!selectedElement}
                     onClose={()=>{
