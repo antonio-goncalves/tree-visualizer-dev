@@ -19,12 +19,17 @@ export default function ElementDetailsWithData({id,treeElementTypes}: { id:strin
         return <div>Error</div>
     }
 
+
+
     if(data){
+        const type = treeElementTypes.find(el=>el.id === data.type)
 
        return (
            <ElementDetails
                {...data}
                treeElementTypes={treeElementTypes}
+               subTitle={type?.title}
+               subTitleColor={type?.color}
            />
        )
     }

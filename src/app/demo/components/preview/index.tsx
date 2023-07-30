@@ -8,6 +8,7 @@ import {ElementPreview} from "@/app/demo/types";
 import {image} from "d3";
 import {CSSProperties} from "react";
 import {TreeElementType} from "@/app/demo/components/Tree";
+import References from "@/app/demo/components/References";
 interface  PopoverProps {
     data?:ElementPreview,
     isLoading?:boolean,
@@ -58,18 +59,7 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
         )
     }
 
-    function renderReferences(){
-        if(!data?.references) return null
-        const title = data.references.length>1?"Sources":"Source"
-        const links = data.references.map((el,i)=>(
-            <a key={i} target={"_blank"} href={el.url} >{el.title}</a>
-        ))
-        return (
-            <p className={"mb-2"}>
-                <b>{title}:</b> {links}
-            </p>
-        )
-    }
+
 
     function renderSubTitle() {
 
@@ -105,7 +95,8 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
                 <h1>{title}</h1>
                 {renderSubTitle()}
                 {renderImage()}
-                {renderReferences()}
+                <References references={data.references}/>
+
                 <div style={descriptionStyle} className={styles.description}>
                     {
                         paragraphs.map((d,i)=>(

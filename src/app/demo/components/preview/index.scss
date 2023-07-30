@@ -1,9 +1,10 @@
 @import "/node_modules/bootstrap/scss/functions";
 @import "/node_modules/bootstrap/scss/variables";
+@import "/src/app/styles/variables";
 @import "index.module";
 $image-height:250px;
 .preview {
-  background: $light;
+  background: $body-bg;
   width:$popover-width;
 
 }

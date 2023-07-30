@@ -61,10 +61,11 @@ export async function GET(request: NextRequest, context: { params: {id:string}})
    // await new Promise(resolve=>setTimeout(resolve,3000))
     return NextResponse.json({
         id:entry._id,
-        name:entry.title,
+        title:entry.title,
         type:entry.lineage,
         description:entry.description,
-        treeElement
+        treeElement,
+        references:entry.references
     })
 
 }

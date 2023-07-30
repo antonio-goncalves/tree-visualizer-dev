@@ -1,65 +1,22 @@
 import Tree, {TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 import classnames from "classnames";
+import {Reference} from "@/app/demo/types";
+import References from "@/app/demo/components/References";
 
 
 export interface ElementDetailsProps {
-    name:string,
+    title:string,
+    subTitle?:string |undefined,
+    subTitleColor?:string |undefined,
     id:string,
     description:string,
     type?:string,
     treeElement:TreeElement,
-    treeElementTypes?:TreeElementType[]
+    treeElementTypes?:TreeElementType[],
+    references:Reference[]
 }
 
-const treeElement:TreeElement = {
-    "id": "felinae",
-    "name": "Felinae",
-    "children": [
-        {
-            "id": "felis",
-            "name": "Felis",
-            "type": "domesticCat",
-            "children": [
-                {
-                    "id": "jungleCat",
-                    "name": "Jungle cat",
-                    "type": "domesticCat"
-                },
-                {
-                    "id": "blackFootedCat",
-                    "name": "Black-footed cat",
-                    "type": "domesticCat"
-                },
-                {
-                    "id": "sandCat",
-                    "name": "Sand cat",
-                    "type": "domesticCat"
-                },
-                {
-                    "id": "chineseMountainCat",
-                    "name": "Chinese mountain cat",
-                    "type": "domesticCat"
-                },
-                {
-                    "id": "africanWildcat",
-                    "name": "African wildcat",
-                    "type": "domesticCat"
-                },
-                {
-                    "id": "europeanWildcat",
-                    "name": "European wildcat",
-                    "type": "domesticCat"
-                },
-                {
-                    "id": "cat",
-                    "name": "Cat",
-                    "type": "domesticCat"
-                }
-            ]
-        }
-    ]
-}
-export default function ElementDetails({treeElement,type,name,id,description,treeElementTypes}:ElementDetailsProps){
+export default function ElementDetails({treeElement,type,title,id,description,treeElementTypes,subTitleColor,subTitle,references}:ElementDetailsProps){
 
     function renderParagraphs(){
         const paragraphs = description.split("\n")
@@ -67,10 +24,18 @@ export default function ElementDetails({treeElement,type,name,id,description,tre
             <p key={i} className={classnames({"mb-0":i===paragraphs.length-1})}>{p}</p>
         ))
     }
+    function renderSubTitle() {
+
+        if(!subTitle) return null
+        return <p className={"mb-2"} style={{color:subTitleColor}}><b>{subTitle}</b></p>
+    }
     return (
         <div>
-            <h1>{name}</h1>
+            <h1>{title}</h1>
+            {renderSubTitle()}
+            <References references={references} />
             {renderParagraphs()}
+
             <Tree
                 leftPadding={65}
                 rightPadding={183}
