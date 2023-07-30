@@ -1,5 +1,7 @@
 @import "../../../styles/variables";
 .modal {
+  position:fixed;
+  overflow-anchor: none;
   color:var(--bs-body-color);
   background-color: $body-bg;
   width: auto;
@@ -8,7 +10,6 @@
   padding:0;
   max-width: none;
   max-height: none;
-  position: relative;
   overflow: visible;
 }
 .content {

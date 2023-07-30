@@ -18,6 +18,11 @@ export interface ElementDetailsProps {
     onTreeNodeClick?:(id:string)=>void
 }
 
+const __treeElement:TreeElement = {
+    id:"xx",
+    name:"Ww"
+}
+
 export default function ElementDetails({treeElement,type,title,id,description,treeElementTypes,subTitleColor,subTitle,references,onTreeNodeClick}:ElementDetailsProps){
 
     function renderParagraphs(){
@@ -35,6 +40,7 @@ export default function ElementDetails({treeElement,type,title,id,description,tr
     function _onTreeNodeClick(node: HierarchyNode<TreeElement>){
         onTreeNodeClick?.(node.data.id)
     }
+
     return (
         <div>
             <h1>{title}</h1>

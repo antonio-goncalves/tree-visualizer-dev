@@ -67,7 +67,7 @@ export default function Tree({
 
 
     function getD3Tree():void{
-
+        console.log("getD3Tree")
         const scrollY = window.scrollY
         removeRef.current?.()
         removeRef.current = D3Tree({
@@ -97,7 +97,7 @@ export default function Tree({
 
 
     function onResize(){
-
+        console.log("resize")
         getD3Tree()
     }
 
@@ -106,8 +106,9 @@ export default function Tree({
 
 
         if(!svgRef.current || !ref.current) return
+        console.log("useEffect")
         getD3Tree();
-        const _onResize = debounce(onResize,resizeDebounceMS)
+        const _onResize = debounce(onResize,resizeDebounceMS,{trailing:true})
 
         addEventListener("resize", _onResize);
        // const resizeObserver = new ResizeObserver(_onResize as ()=>void)

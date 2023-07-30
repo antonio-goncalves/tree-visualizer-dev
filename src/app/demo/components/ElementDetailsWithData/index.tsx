@@ -24,6 +24,7 @@ export default function ElementDetailsWithData({id,treeElementTypes,onTreeNodeCl
     if(data){
         const type = treeElementTypes?.find(el=>el.id === data.type)
 
+
        return (
            <ElementDetails
                {...data}

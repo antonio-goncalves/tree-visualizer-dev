@@ -7,6 +7,7 @@ export default class WebUtils {
     static lockedBody:boolean = false
 
     static lockBodyScroll(){
+
         if(this.lockedBody) return
         this.lockedBody = true
         document.documentElement.style.scrollBehavior = "auto"
@@ -19,6 +20,7 @@ export default class WebUtils {
     }
 
     static unLockBodyScroll(){
+
         if(!this.lockedBody) return
         this.lockedBody = false
         document.body.style.position = "static";

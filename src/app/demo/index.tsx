@@ -281,7 +281,7 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
 
 
     function renderModal(){
-        if(!selectedElement) return null;
+        if(!selectedElement) return null
         return (
 
                 <ElementDetailsModal
@@ -306,8 +306,9 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
     return (
         <div className={styles.container}>
 
-            {renderPopOver()}
+
             {renderTree()}
+            {renderPopOver()}
             {renderModal()}
         </div>
 
