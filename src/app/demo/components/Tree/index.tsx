@@ -88,17 +88,13 @@ export default function Tree({
         })
 
 
-        setTimeout(()=>{
 
-        },3000)
 
     }
 
 
 
-    function onScroll(){
-        scrollYRef.current = window.scrollY
-    }
+
 
     function onResize(){
 
@@ -106,23 +102,20 @@ export default function Tree({
     }
 
     useEffect(()=>{
-        window.addEventListener("scroll",onScroll)
-        return ()=>{
-            window.removeEventListener("scroll",onScroll)
-        }
-    },[])
-    useEffect(()=>{
 
 
 
         if(!svgRef.current || !ref.current) return
         getD3Tree();
         const _onResize = debounce(onResize,resizeDebounceMS)
-        const resizeObserver = new ResizeObserver(_onResize as ()=>void)
-        resizeObserver.observe(ref.current!)
+
+        addEventListener("resize", _onResize);
+       // const resizeObserver = new ResizeObserver(_onResize as ()=>void)
+        //resizeObserver.observe(ref.current!)
         return ()=>{
             removeRef.current?.()
-            resizeObserver.disconnect()
+          //  resizeObserver.disconnect()
+            removeEventListener("resize",_onResize)
         }
     },[svgRef,ref,leftPadding,rightPadding,padding,treeElement])
 
