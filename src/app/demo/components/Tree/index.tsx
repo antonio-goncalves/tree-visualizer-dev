@@ -31,8 +31,7 @@ export interface TreeProps {
     resizeDebounceMS?:number,
     padding?:number,
     leftPadding?:number,
-    rightPadding?:number,
-    disableResizeEvent?:boolean
+    rightPadding?:number
 
 }
 
@@ -53,18 +52,17 @@ export default function Tree({
      onNodeMouseLeave,
      onNodeFocusOut,
      onNodeFocusIn,
-    treeElementTypes,
-    disableResizeEvent
+    treeElementTypes
 }:TreeProps){
     const ref = useRef<HTMLDivElement | null>(null)
     const svgRef = useRef<SVGSVGElement | null>(null)
 
     const removeRef = useRef<()=>void| undefined>()
+    const scrollYRef = useRef<number>(0)
 
-    const disableResizeEventRef = useRef<boolean | undefined>(disableResizeEvent)
-    useEffect(()=>{
-        disableResizeEventRef.current = disableResizeEvent
-    },[disableResizeEvent])
+
+
+
 
     function getD3Tree():void{
 
@@ -85,13 +83,18 @@ export default function Tree({
             leftPadding,
             padding
         })
-        console.log("scrollY",scrollY)
-        //@ts-ignore
-        window.scrollTo({top:scrollY,behavior:"instant"})
+
+
         setTimeout(()=>{
 
         },3000)
 
+    }
+
+
+
+    function onScroll(){
+        scrollYRef.current = window.scrollY
     }
 
     function onResize(){
@@ -99,7 +102,12 @@ export default function Tree({
         getD3Tree()
     }
 
-
+    useEffect(()=>{
+        window.addEventListener("scroll",onScroll)
+        return ()=>{
+            window.removeEventListener("scroll",onScroll)
+        }
+    },[])
     useEffect(()=>{
 
 

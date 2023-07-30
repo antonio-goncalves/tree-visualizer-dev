@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {ElementDetails, ElementImage, ElementPreview} from "@/app/demo/types";
+import {ElementEntry, ElementImage, ElementPreview} from "@/app/demo/types";
 import * as mongoDB  from  "mongodb";
 import {Filter} from "mongodb";
 
@@ -14,7 +14,7 @@ interface Error {
 
 export async function GET(request: NextRequest, context: { params :{id:string}}):Promise<NextResponse<ElementPreview | Error>> {
     await mongoClient.connect()
-    const collection = animalsDB.collection<ElementDetails>("cats")
+    const collection = animalsDB.collection<ElementEntry>("cats")
 
 
  //   await new Promise(resolve=>setTimeout(resolve,250))

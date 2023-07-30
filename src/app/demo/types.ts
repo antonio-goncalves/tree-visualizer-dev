@@ -8,7 +8,7 @@ export interface ElementImage {
     preview?:boolean
 }
 
-export interface ElementDetails {
+export interface ElementEntry {
     _id:string,
     parent?:string,
     title:string,

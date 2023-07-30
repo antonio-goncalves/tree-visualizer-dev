@@ -1,6 +1,6 @@
 import * as mongoDB from "mongodb";
 import {NextRequest, NextResponse} from "next/server";
-import {ElementDetails} from "@/app/demo/types";
+import {ElementEntry} from "@/app/demo/types";
 import {TreeElement} from "@/app/demo/components/Tree";
 
 const uri = process.env.MONGO_URI || "mongodb://localhost:27017?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000";
@@ -11,7 +11,7 @@ const animalsDB = mongoClient.db("animals");
 export async function getTree():Promise<TreeElement | undefined>{
 
     await mongoClient.connect()
-    const collection = animalsDB.collection<ElementDetails>("cats")
+    const collection = animalsDB.collection<ElementEntry>("cats")
 
     const elements = await collection.find({}).project({title:1,_id:1,parent:1,lineage:1}).toArray()
 

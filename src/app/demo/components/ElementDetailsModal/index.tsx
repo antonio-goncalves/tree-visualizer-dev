@@ -1,23 +1,24 @@
 import Modal from "@/app/demo/components/Modal";
 
 import React from "react";
+import {TreeElementType} from "@/app/demo/components/Tree";
+import Loading from "@/app/demo/components/Loading";
 
-const ElementDetails = React.lazy(() => import("@/app/demo/components/ElementDetails"));
+
+const ElementDetailsWithData = React.lazy(() => import("@/app/demo/components/ElementDetailsWithData"));
 interface ElementDetailsModalProps {
     isOpen:boolean,
     elementId:string,
     onClose:()=>void,
+    treeElementTypes:TreeElementType[]
 }
-function renderLazyLoading(){
-    return (
-        <h1 className={"d-flex justify-content-center mb-0 text-secondary  align-items-center h-100"}>Loading...</h1>
-    )
-}
-export default function ElementDetailsModal({isOpen,onClose,elementId}:ElementDetailsModalProps){
+
+export default function ElementDetailsModal({isOpen,onClose,elementId,treeElementTypes}:ElementDetailsModalProps){
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} >
-            <React.Suspense fallback={renderLazyLoading()}>
-                <ElementDetails elementId={elementId}/>
+            <React.Suspense fallback={<Loading/>}>
+                <ElementDetailsWithData id={elementId} treeElementTypes={treeElementTypes}/>
             </React.Suspense>
 
         </Modal>

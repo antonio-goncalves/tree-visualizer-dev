@@ -49,17 +49,14 @@ interface IndexProps {
 }
 
 export default function Index({treeData,treeElementTypes}:IndexProps){
-    const arrowRef = useRef(null);
+
     const popoverRef = useRef<HTMLDivElement | null>(null)
     const [hoveredElement,setHoveredElement] = useState<string | null>(null)
     const [selectedElement,setSelectedElement] = useState<string | null>(null)
     const [popOverPosition,setPopOverPosition] = useState<PopOverPosition | null>()
     const [anchorPosition,setAnchorPosition] = useState<AnchorPosition | null>()
-    const [disableResizeEvent,setDisableResizeEvent] = useState<boolean>(false)
 
   //  const {data,error} = useSWR<TreeElement>("/elements/tree", fetcher)
-
-
 
 
     useEffect(()=>{
@@ -181,7 +178,6 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
             onNodeMouseOver={(e,element)=>{
 
             }}
-            disableResizeEvent={!!selectedElement}
             onNodeMouseEnter={onNodeMouseEnter}
             onNodeMouseLeave={onNodeMouseLeave}
             onNodeFocusIn={onNodeMouseEnter}
@@ -288,12 +284,16 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
         if(!selectedElement) return null;
         return (
 
-                <ElementDetailsModal elementId={selectedElement} isOpen={!!selectedElement} onClose={()=>{
-                    setSelectedElement(null)
-
-                    setHoveredElement(null)
-                }
-                }/>
+                <ElementDetailsModal
+                    setSelectedElement={setSelectedElement}
+                    elementId={selectedElement}
+                    isOpen={!!selectedElement}
+                    onClose={()=>{
+                        setSelectedElement(null)
+                        setHoveredElement(null)
+                    }  }
+                    treeElementTypes={treeElementTypes}
+                />
 
 
         )
