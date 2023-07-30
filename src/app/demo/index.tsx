@@ -161,7 +161,7 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
     }
 
     function unsetHoveredElement(){
-      //  return
+
         setPopOverPosition(null)
         setHoveredElement(null)
     }
@@ -287,6 +287,9 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
                 <ElementDetailsModal
                     elementId={selectedElement}
                     isOpen={!!selectedElement}
+                    onTreeNodeClick={(id)=>{
+                        setSelectedElement(id)
+                    }}
                     onClose={()=>{
                         setSelectedElement(null)
                         setHoveredElement(null)

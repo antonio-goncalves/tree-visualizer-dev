@@ -31,7 +31,8 @@ export interface TreeProps {
     resizeDebounceMS?:number,
     padding?:number,
     leftPadding?:number,
-    rightPadding?:number
+    rightPadding?:number,
+    nodeVerticalDistance?:number
 
 }
 
@@ -52,7 +53,8 @@ export default function Tree({
      onNodeMouseLeave,
      onNodeFocusOut,
      onNodeFocusIn,
-    treeElementTypes
+    treeElementTypes,
+                                 nodeVerticalDistance
 }:TreeProps){
     const ref = useRef<HTMLDivElement | null>(null)
     const svgRef = useRef<SVGSVGElement | null>(null)
@@ -81,7 +83,8 @@ export default function Tree({
             width:ref.current!.offsetWidth,
             rightPadding,
             leftPadding,
-            padding
+            padding,
+            nodeVerticalDistance
         })
 
 

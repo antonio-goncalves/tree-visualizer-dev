@@ -10,15 +10,16 @@ interface ElementDetailsModalProps {
     isOpen:boolean,
     elementId:string,
     onClose:()=>void,
-    treeElementTypes:TreeElementType[]
+    treeElementTypes:TreeElementType[],
+    onTreeNodeClick?:(id:string)=>void | undefined
 }
 
-export default function ElementDetailsModal({isOpen,onClose,elementId,treeElementTypes}:ElementDetailsModalProps){
+export default function ElementDetailsModal({isOpen,onClose,elementId,treeElementTypes,onTreeNodeClick}:ElementDetailsModalProps){
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} >
             <React.Suspense fallback={<Loading/>}>
-                <ElementDetailsWithData id={elementId} treeElementTypes={treeElementTypes}/>
+                <ElementDetailsWithData id={elementId} treeElementTypes={treeElementTypes} onTreeNodeClick={onTreeNodeClick}/>
             </React.Suspense>
 
         </Modal>

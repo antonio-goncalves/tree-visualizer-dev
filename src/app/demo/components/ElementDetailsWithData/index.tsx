@@ -10,7 +10,7 @@ const fetcher = (url:string) => fetch(url).then((res) => {
     }
     return res.json()
 })
-export default function ElementDetailsWithData({id,treeElementTypes}: { id:string, treeElementTypes?:TreeElementType[] }){
+export default function ElementDetailsWithData({id,treeElementTypes,onTreeNodeClick}: { id:string, treeElementTypes?:TreeElementType[],onTreeNodeClick?:(id:string)=>void }){
 
     const {data,error} = useSWR<ElementDetailsProps>(`/elements/details/${id}`, fetcher)
 
@@ -28,6 +28,7 @@ export default function ElementDetailsWithData({id,treeElementTypes}: { id:strin
            <ElementDetails
                {...data}
                treeElementTypes={treeElementTypes}
+               onTreeNodeClick={onTreeNodeClick}
                subTitle={type?.title}
                subTitleColor={type?.color}
            />

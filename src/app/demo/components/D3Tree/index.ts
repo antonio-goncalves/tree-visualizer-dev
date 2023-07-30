@@ -15,7 +15,8 @@ interface D3TreeOptions {
     width?:number,
     leftPadding?:number,
     rightPadding?:number
-    padding?:number
+    padding?:number,
+    nodeVerticalDistance?:number
 }
 
 const DEFAULT_PADDING = 100;
@@ -37,7 +38,7 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
 
     const width = options?.width || 1240 // outer width, in pixels
     // height= undefined, // outer height, in pixels
-
+    const dx = options.nodeVerticalDistance || 30;
     const fill = "#999" // fill for nodes
     const stroke = "#BBBBBB"//"#555" // stroke for links
     const strokeWidth = 1.5 // stroke width for links
@@ -75,7 +76,7 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
     const L = label == null ? null : descendants.map((d) => label(d.data));
 
     // Compute the layout.
-    const dx = 30;
+
 
 
     const dy = innerWidth /root.height;
