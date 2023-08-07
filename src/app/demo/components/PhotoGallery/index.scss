@@ -8,7 +8,7 @@ $ig-blue:$primary;
   .image-gallery-content.fullscreen {
     background: #000;
     height: 100vh;
-
+    height: -webkit-fill-available;
     display: flex;
     flex-direction: column;
     .image-gallery-slide-wrapper {
