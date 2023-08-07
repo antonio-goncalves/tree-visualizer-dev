@@ -1,6 +1,7 @@
 import React from "react";
 import { bool, func, string } from "prop-types";
 import Image from 'next/image'
+import {Reference} from "@/app/demo/types";
 const defaultProps = {
     description: "",
     fullscreen: "",
@@ -14,7 +15,7 @@ const defaultProps = {
     loading: "eager",
 };
 
-interface ItemProps {
+interface _ItemProps {
     description: string,
     fullscreen: string, // fullscreen version of img
     handleImageLoaded: ()=>void,
@@ -29,23 +30,40 @@ interface ItemProps {
     srcSet: string,
     loading: string,
 }
+/*
+* label,thumbnail,originalAlt,reference,original,description
+* */
+interface ItemProps {
+    src:string,
+    alt:string,
+    reference:Reference,
+    description?: string |undefined,
+    label?:string | undefined,
+}
 
-const Item = React.memo((props:any) => {
+const Item = React.memo(({description,label,reference,src,alt}:ItemProps) => {
 
 
-    const original = props.original as string
     return (
         <React.Fragment>
 
             <Image
                 className="image-gallery-image xxx"
-                src={original}
-                alt={"xxxx"}
+                src={src}
+                alt={alt}
+                sizes= {`
+                        (max-width: 575px) 575px,
+                        (max-width: 767px) 767px,
+                        (max-width: 991px) 991px,
+                        (max-width: 1199px) 1199px, 
+                        (max-width: 1399px)  1399px,  
+                        (max-width: 1919px)  1919px`
+            }
                 fill={true}
 
             />
 
-                <span className="image-gallery-description">Description</span>
+                <span className="image-gallery-description">{description}</span>
 
         </React.Fragment>
     );

@@ -1,24 +1,31 @@
 import Image from 'next/image'
-export default function Thumbnail(props:any){
-    const src = props.thumbnail as string
+
+interface ThumbnailProps {
+    src:string,
+    alt:string,
+    label?:string | undefined
+}
+
+export default function Thumbnail({label,src,alt}:ThumbnailProps){
+    console.log("Thumbnail",label,src,alt)
     return (
         <span className="image-gallery-thumbnail-inner">
         <Image
             className="image-gallery-thumbnail-image"
             src={src}
             fill={true}
-            alt={"xxx"}
+            alt={alt}
             sizes={"100px"}
 
         />
 
                 <div className="image-gallery-thumbnail-label">
-                    Label
+                    {label}
                 </div>
 
       </span>
     )
-    return (
+   /* return (
         <span className="image-gallery-thumbnail-inner">
         <img
             className="image-gallery-thumbnail-image"
@@ -31,5 +38,5 @@ export default function Thumbnail(props:any){
                 </div>
 
       </span>
-    )
+    )*/
 }

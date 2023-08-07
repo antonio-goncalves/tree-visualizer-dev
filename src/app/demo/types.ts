@@ -1,9 +1,15 @@
 import {TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 
-export interface ElementImage {
+
+export interface ImageInfo {
     src:string,
     alt:string,
     reference:Reference,
+    description?:string,
+    label?:string
+}
+
+export interface ElementImage extends ImageInfo{
     aspectRatio?:number | string,
     main?:boolean,
     preview?:boolean

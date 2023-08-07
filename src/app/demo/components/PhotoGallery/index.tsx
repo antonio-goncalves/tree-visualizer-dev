@@ -3,68 +3,72 @@ import ImageGallery, {ReactImageGalleryItem} from "react-image-gallery";
 import "./index.scss"
 import Item from "@/app/demo/components/PhotoGallery/Item";
 import Thumbnail from "@/app/demo/components/PhotoGallery/Thumbnail";
-const images: ReactImageGalleryItem[] = [
-    {
-        original: "http://127.0.0.1:3000/1.jpg",
-        thumbnail: "http://127.0.0.1:3000/1.jpg",
-        description:"xxx"
-    },
-    {
-        original: "http://127.0.0.1:3000/2.jpg",
-        thumbnail: "http://127.0.0.1:3000/2.jpg"
-    },
-    {
-        original: "http://127.0.0.1:3000/3.jpg",
-        thumbnail: "http://127.0.0.1:3000/3.jpg"
-    },
-    {
-        original: "http://127.0.0.1:3000/4.jpg",
-        thumbnail: "http://127.0.0.1:3000/4.jpg"
-    },
-    {
-        original: "http://127.0.0.1:3000/5.jpg",
-        thumbnail: "http://127.0.0.1:3000/5.jpg"
-    },
-];
+import {ImageInfo, Reference} from "@/app/demo/types";
+import React, {useEffect, useState} from "react";
 
-export default function PhotoGallery(){
-
-    function renderItem(item:ReactImageGalleryItem){
+interface PhotoGalleryProps {
+    items:ImageInfo[]
+}
 
 
+interface ReactImageGalleryItemExtra extends ReactImageGalleryItem{
+    reference:Reference,
+    label?:string
+
+}
+export default function PhotoGallery({items}:PhotoGalleryProps){
+
+    const [_items,setItems] = useState<ReactImageGalleryItemExtra[]>(getImageGalleryItems())
+
+    useEffect(()=>{
+        setItems(getImageGalleryItems())
+    },[items])
+
+    function renderItem(item:ReactImageGalleryItemExtra){
+        const {label,thumbnail,originalAlt,reference,original,description} = item
 
             return (
                 <Item
-                    description={item.description}
-                    fullscreen={item.fullscreen}
-                    handleImageLoaded={null}
-                    isFullscreen={false}
-                    onImageError={()=>null}
-                    original={item.original}
-                    originalAlt={item.originalAlt}
-                    originalHeight={item.originalHeight}
-                    originalWidth={item.originalWidth}
-                    originalTitle={item.originalTitle}
-                    sizes={item.sizes}
-                    loading={item.loading}
-                    srcSet={item.srcSet}
+                    src={original}
+                    alt={originalAlt || ""}
+                    reference={reference}
+                    label={label}
+                    description={description}
                 />
-            );
+            )
+
 
     }
 
-    function renderThumbInner(item:ReactImageGalleryItem){
+    function renderThumbInner(item:ReactImageGalleryItemExtra){
+        console.log("renderThumbInner",item)
+        const {original,originalAlt,label} = item
         return (
             <Thumbnail
-                thumbnail={item.thumbnail}
+                src={original}
+                alt={originalAlt || ""}
+                label={label}
              />
         )
     }
 
+    function getImageGalleryItems():ReactImageGalleryItemExtra[]{
+        if(!items) return []
+        return items.map(el=>({
+            original:el.src,
+            thumbnail:el.src,
+            originalAlt:el.alt,
+            reference:el.reference,
+            description:el.description,
+            label:el.label
+
+
+        }))
+    }
+
     return  (
-        <div style={{border:"1px solid blue"}}>
-            <div>xxx</div>
-            <ImageGallery additionalClass={"photo-gallery"} renderItem={renderItem} renderThumbInner={renderThumbInner} items={images} />
-        </div>
+
+            <ImageGallery additionalClass={"photo-gallery mt-4"} renderItem={renderItem as (item: ReactImageGalleryItem) => React.ReactNode} renderThumbInner={renderThumbInner as (item: ReactImageGalleryItem) => React.ReactNode} items={_items} />
+
     )
 }

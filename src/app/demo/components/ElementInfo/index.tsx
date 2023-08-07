@@ -1,6 +1,6 @@
 import Tree, {TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 import classnames from "classnames";
-import {ElementDetails, Reference} from "@/app/demo/types";
+import {ElementDetails, ImageInfo, Reference} from "@/app/demo/types";
 import References from "@/app/demo/components/References";
 import {HierarchyNode} from "d3";
 import PhotoGallery from "@/app/demo/components/PhotoGallery";
@@ -10,6 +10,50 @@ export interface ElementInfoProps extends ElementDetails{
     treeElementTypes?:TreeElementType[],
     onTreeNodeClick?:(id:string)=>void
 }
+const images:ImageInfo[] = [
+    {
+        alt:"xx",
+        src:"https://static.antonio-goncalves.com/images/test/1.jpg",
+        description:"description",
+        label:"label",
+        reference:{
+            title:"Wikipedia",
+            url:"https://www.wikipedia.com"
+        }
+    },
+    {
+        alt:"xx2",
+        src:"https://static.antonio-goncalves.com/images/test/2.jpg",
+        reference:{
+            title:"Wikipedia",
+            url:"https://www.wikipedia.com"
+        }
+    },
+    {
+        alt:"xx",
+        src:"https://static.antonio-goncalves.com/images/test/3.jpg",
+        reference:{
+            title:"Wikipedia",
+            url:"https://www.wikipedia.com"
+        }
+    },
+    {
+        alt:"xx",
+        src:"https://static.antonio-goncalves.com/images/test/4.jpg",
+        reference:{
+            title:"Wikipedia",
+            url:"https://www.wikipedia.com"
+        }
+    },
+    {
+        alt:"xx",
+        src:"https://static.antonio-goncalves.com/images/test/5.jpg",
+        reference:{
+            title:"Wikipedia",
+            url:"https://www.wikipedia.com"
+        }
+    }
+]
 
 
 
@@ -44,13 +88,14 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
 
         )
     }
-    return <PhotoGallery />
+
     return (
         <div>
             <h1>{title}</h1>
             {renderSubTitle()}
             <References references={references} />
             {renderParagraphs()}
+            <PhotoGallery items={images} />
             {renderTree()}
         </div>
     )
