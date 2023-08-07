@@ -16,7 +16,7 @@ import classnames from "classnames";
 import useSWR from "swr";
 import {ElementPreview} from "@/app/demo/types";
 import TreeData from "../treeData";
-import ElementDetailsModal from "@/app/demo/components/ElementDetailsModal";
+import ElementInfoModal from "@/app/demo/components/ElementInfoModal";
 
 
 const popOverWidth = getNumberFromCSSString(previewStyles.popOverWidth);
@@ -284,7 +284,7 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
         if(!selectedElement) return null
         return (
 
-                <ElementDetailsModal
+                <ElementInfoModal
                     elementId={selectedElement}
                     isOpen={!!selectedElement}
                     onTreeNodeClick={(id)=>{

@@ -1,0 +1,49 @@
+@import "/src/app/styles/variables";
+$ig-blue:$primary;
+@import "react-image-gallery/styles/scss/image-gallery";
+
+
+
+.photo-gallery {
+  .image-gallery-content.fullscreen {
+    background: #000;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    .image-gallery-slide-wrapper {
+      .image-gallery-swipe {
+        height: 100%;
+      }
+      flex: 1 0;
+    }
+  }
+  .image-gallery-swipe {
+    height: 400px;
+    .image-gallery-slides {
+      height: 100%;
+      .image-gallery-slide {
+        border: 1px solid red;
+        height: 100%;
+      }
+    }
+  }
+
+  .image-gallery-thumbnail.active, .image-gallery-thumbnail:focus , .image-gallery-thumbnail:hover{
+    border-radius: $border-radius;
+  }
+  .image-gallery-thumbnail {
+    height: auto;
+    width: auto;
+    .image-gallery-thumbnail-inner {
+      height: 60px;
+      width:100px;
+      .image-gallery-thumbnail-image {
+        object-fit: contain;
+        background-color: $dark-color;
+      }
+    }
+
+  }
+}
+

@@ -1,8 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {ElementEntry, ElementImage, ElementPreview} from "@/app/demo/types";
+import {ElementDetails, ElementEntry, ElementImage, ElementPreview} from "@/app/demo/types";
 import * as mongoDB  from  "mongodb";
-import {Filter} from "mongodb";
-import {ElementDetailsProps} from "@/app/demo/components/ElementDetails";
 import {TreeElement} from "@/app/demo/components/Tree";
 
 const uri = process.env.MONGO_URI || "mongodb://localhost:27017?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000";
@@ -14,7 +12,7 @@ interface Error {
     msg:string
 }
 
-export async function GET(request: NextRequest, context: { params: {id:string}}):Promise<NextResponse<ElementDetailsProps | Error>> {
+export async function GET(request: NextRequest, context: { params: {id:string}}):Promise<NextResponse<ElementDetails | Error>> {
     await mongoClient.connect()
     const collection = animalsDB.collection<ElementEntry>("cats")
 

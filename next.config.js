@@ -7,6 +7,9 @@ const nextConfig = {
               },
              {
                  hostname:"static.antonio-goncalves.com"
+             },
+             {
+                 hostname:"127.0.0.1"
              }
 
          ]

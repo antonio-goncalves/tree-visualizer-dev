@@ -1,3 +1,4 @@
+import {TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 
 export interface ElementImage {
     src:string,
@@ -37,5 +38,16 @@ export interface ElementPreview {
     subTitleColor?:string,
     description:string,
     image?:ElementImage,
+    references:Reference[]
+}
+
+export interface ElementDetails {
+    title:string,
+    subTitle?:string |undefined,
+    subTitleColor?:string |undefined,
+    id:string,
+    description:string,
+    type?:string,
+    treeElement:TreeElement,
     references:Reference[]
 }
