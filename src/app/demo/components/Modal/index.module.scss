@@ -32,6 +32,7 @@
   border-radius: 100px;
   color:white;
   transform: translate(50%,-50%);
+  z-index: 2000;
 }
 .close-button:focus,
 .close-button:hover{

@@ -68,9 +68,10 @@ export default function PhotoGallery({items,className}:PhotoGalleryProps){
         }))
     }
 
+    if(_items.length === 0) return null
     return  (
 
-            <ImageGallery additionalClass={classnames("photo-gallery",className)} renderItem={renderItem as (item: ReactImageGalleryItem) => React.ReactNode} renderThumbInner={renderThumbInner as (item: ReactImageGalleryItem) => React.ReactNode} items={_items} />
+            <ImageGallery items={_items} additionalClass={classnames("photo-gallery",className)} renderItem={renderItem as (item: ReactImageGalleryItem) => React.ReactNode} renderThumbInner={renderThumbInner as (item: ReactImageGalleryItem) => React.ReactNode}  />
 
     )
 }

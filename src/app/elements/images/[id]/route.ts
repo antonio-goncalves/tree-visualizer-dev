@@ -64,17 +64,53 @@ export async function GET(request: NextRequest, context: { params: {id:string}})
     //   await new Promise(resolve=>setTimeout(resolve,250))
 
     const id = context.params.id
-    const entry = await collection.findOne({_id:id})
-    if(!entry){
-        return NextResponse.json({
-            msg:"Element not found"
-        },{
-            status:404
-        })
+
+    interface AggregateResponse {
+        images?:ElementImage[],
+        children?:{
+            images?:ElementImage[]
+        }
     }
-    const images = entry.images.filter(el=>el.photoGallery)
+    const res =await collection.aggregate<AggregateResponse>(
+        [
+            {$project:{images:1}},
+            {$match:{_id:id}},
+            {
+                $graphLookup: {
+                    from: "cats",
+                    startWith: "$_id",
+                    connectFromField: "_id",
+                    connectToField:"parent",
+                    as: "children"
+                }
+            },
+            {
+                $unwind:
+                    {
+                        path: "$children",
+                        preserveNullAndEmptyArrays: true
+                    }
+            },
+            {
+                $unwind:
+                    {
+                        path: "$children.images",
+                        preserveNullAndEmptyArrays: true
+                    }
+            }
+
+
+        ]).toArray()
+
+    const parentImages = res[0]?.images || []
+    //@ts-ignore
+    const childImages = res.filter(el=>el.children?.images).map(el=>el.children!.images!) as ElementImage[]
+    const images:ElementImage[] =[ ...parentImages,...childImages]
+    return NextResponse.json(images.filter(el=>el.photoGallery))
+
+   // const images = entry.images.filter(el=>el.photoGallery)
 
    //  await new Promise(resolve=>setTimeout(resolve,3000))
-    return NextResponse.json(images)
+    //return NextResponse.json(images)
 
 }
