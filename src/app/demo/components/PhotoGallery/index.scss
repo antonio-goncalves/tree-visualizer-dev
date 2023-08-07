@@ -5,6 +5,9 @@ $ig-blue:$primary;
 
 
 .photo-gallery {
+  .image-gallery-content .image-gallery-slide .image-gallery-image {
+    max-height: none;
+  }
   .image-gallery-slide .image-gallery-description {
     left: 50%;
     bottom: 20px;
@@ -29,12 +32,12 @@ $ig-blue:$primary;
     height: 400px;
     .image-gallery-swipe {
       height: 100%;
-      .image-gallery-slides {
+    }
+    .image-gallery-slides {
+      height: 100%;
+      .image-gallery-slide {
+        //  border: 1px solid red;
         height: 100%;
-        .image-gallery-slide {
-          //  border: 1px solid red;
-          height: 100%;
-        }
       }
     }
   }
