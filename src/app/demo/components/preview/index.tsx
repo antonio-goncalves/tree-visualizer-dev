@@ -95,7 +95,7 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
                 <h1>{title}</h1>
                 {renderSubTitle()}
                 {renderImage()}
-                <References references={data.references}/>
+                <References references={data.references} className={"mb-2"}/>
 
                 <div style={descriptionStyle} className={styles.description}>
                     {

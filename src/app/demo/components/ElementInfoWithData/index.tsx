@@ -19,22 +19,23 @@ export default function ElementInfoWithData({id,treeElementTypes,onTreeNodeClick
     if(error){
         return <div>Error</div>
     }
+    if(!data) return <Loading/>
 
 
 
-    if(data){
-        const type = treeElementTypes?.find(el=>el.id === data.type)
+
+    const type = treeElementTypes?.find(el=>el.id === data.type)
 
 
-       return (
-           <ElementInfo
-               {...data}
-               treeElementTypes={treeElementTypes}
-               onTreeNodeClick={onTreeNodeClick}
-               subTitle={type?.title}
-               subTitleColor={type?.color}
-           />
-       )
-    }
-    return <Loading />
+   return (
+       <ElementInfo
+           {...data}
+           treeElementTypes={treeElementTypes}
+           onTreeNodeClick={onTreeNodeClick}
+           subTitle={type?.title}
+           subTitleColor={type?.color}
+       />
+   )
+
+
 }

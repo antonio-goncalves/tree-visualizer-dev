@@ -5,29 +5,40 @@ $ig-blue:$primary;
 
 
 .photo-gallery {
+  .image-gallery-slide .image-gallery-description {
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    background: $dark-color;// rgba(255,255,255,0.1);
+    border-radius: $border-radius;
+
+  }
   .image-gallery-content.fullscreen {
     background: #000;
     height: 100vh;
-    height: -webkit-fill-available;
+   // height: -webkit-fill-available;
     display: flex;
     flex-direction: column;
     .image-gallery-slide-wrapper {
-      .image-gallery-swipe {
-        height: 100%;
-      }
+      height: 100%;
+
       flex: 1 0;
     }
   }
-  .image-gallery-swipe {
+  .image-gallery-slide-wrapper {
     height: 400px;
-    .image-gallery-slides {
+    .image-gallery-swipe {
       height: 100%;
-      .image-gallery-slide {
-      //  border: 1px solid red;
+      .image-gallery-slides {
         height: 100%;
+        .image-gallery-slide {
+          //  border: 1px solid red;
+          height: 100%;
+        }
       }
     }
   }
+
 
   .image-gallery-thumbnail.active, .image-gallery-thumbnail:focus , .image-gallery-thumbnail:hover{
     border-radius: $border-radius;

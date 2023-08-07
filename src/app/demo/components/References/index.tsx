@@ -1,14 +1,20 @@
 import {Reference} from "@/app/demo/types";
 
 
-export default function References({references}:{references?:Reference[]}){
+interface ReferencesProps {
+    references?:Reference[] | Reference | undefined,
+    className?:string
+}
+
+export default function References({references,className}:ReferencesProps){
     if(!references) return null
-    const title = references.length>1?"Sources":"Source"
-    const links = references.map((el,i)=>(
+    const _references = Array.isArray(references)?references:[references]
+    const title = _references.length>1?"Sources":"Source"
+    const links = _references.map((el,i)=>(
         <a key={i} target={"_blank"} href={el.url} >{el.title}</a>
     ))
     return (
-        <p className={"mb-2"}>
+        <p className={className}>
             <b>{title}:</b> {links}
         </p>
     )

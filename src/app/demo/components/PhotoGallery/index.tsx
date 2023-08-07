@@ -5,9 +5,11 @@ import Item from "@/app/demo/components/PhotoGallery/Item";
 import Thumbnail from "@/app/demo/components/PhotoGallery/Thumbnail";
 import {ImageInfo, Reference} from "@/app/demo/types";
 import React, {useEffect, useState} from "react";
+import classnames from "classnames";
 
 interface PhotoGalleryProps {
-    items:ImageInfo[]
+    items:ImageInfo[],
+    className?:string
 }
 
 
@@ -16,7 +18,7 @@ interface ReactImageGalleryItemExtra extends ReactImageGalleryItem{
     label?:string
 
 }
-export default function PhotoGallery({items}:PhotoGalleryProps){
+export default function PhotoGallery({items,className}:PhotoGalleryProps){
 
     const [_items,setItems] = useState<ReactImageGalleryItemExtra[]>(getImageGalleryItems())
 
@@ -26,7 +28,7 @@ export default function PhotoGallery({items}:PhotoGalleryProps){
 
     function renderItem(item:ReactImageGalleryItemExtra){
         const {label,thumbnail,originalAlt,reference,original,description} = item
-
+            console.log("originalAlt",originalAlt)
             return (
                 <Item
                     src={original}
@@ -68,7 +70,7 @@ export default function PhotoGallery({items}:PhotoGalleryProps){
 
     return  (
 
-            <ImageGallery additionalClass={"photo-gallery mt-4"} renderItem={renderItem as (item: ReactImageGalleryItem) => React.ReactNode} renderThumbInner={renderThumbInner as (item: ReactImageGalleryItem) => React.ReactNode} items={_items} />
+            <ImageGallery additionalClass={classnames("photo-gallery",className)} renderItem={renderItem as (item: ReactImageGalleryItem) => React.ReactNode} renderThumbInner={renderThumbInner as (item: ReactImageGalleryItem) => React.ReactNode} items={_items} />
 
     )
 }

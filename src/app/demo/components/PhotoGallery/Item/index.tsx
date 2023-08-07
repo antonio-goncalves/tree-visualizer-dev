@@ -2,6 +2,7 @@ import React from "react";
 import { bool, func, string } from "prop-types";
 import Image from 'next/image'
 import {Reference} from "@/app/demo/types";
+import References from "@/app/demo/components/References";
 const defaultProps = {
     description: "",
     fullscreen: "",
@@ -44,6 +45,11 @@ interface ItemProps {
 const Item = React.memo(({description,label,reference,src,alt}:ItemProps) => {
 
 
+    function renderInfo(){
+        if(!reference) return null
+        return <span className="image-gallery-description"><References className={"mb-0"} references={reference}/></span>
+    }
+
     return (
         <React.Fragment>
 
@@ -62,8 +68,8 @@ const Item = React.memo(({description,label,reference,src,alt}:ItemProps) => {
                 fill={true}
 
             />
+            {renderInfo()}
 
-                <span className="image-gallery-description">{description}</span>
 
         </React.Fragment>
     );

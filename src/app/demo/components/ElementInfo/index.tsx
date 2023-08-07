@@ -4,6 +4,7 @@ import {ElementDetails, ImageInfo, Reference} from "@/app/demo/types";
 import References from "@/app/demo/components/References";
 import {HierarchyNode} from "d3";
 import PhotoGallery from "@/app/demo/components/PhotoGallery";
+import PhotoGalleryWithData from "@/app/demo/components/PhotoGalleryWithData";
 
 export interface ElementInfoProps extends ElementDetails{
 
@@ -91,11 +92,11 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
 
     return (
         <div>
-            <h1>{title}</h1>
+            <h1>{title} - {id}</h1>
             {renderSubTitle()}
-            <References references={references} />
+            <References references={references} className={"mb-2"} />
             {renderParagraphs()}
-            <PhotoGallery items={images} />
+            <PhotoGalleryWithData className={"mt-4 mb-4"} id={id} />
             {renderTree()}
         </div>
     )

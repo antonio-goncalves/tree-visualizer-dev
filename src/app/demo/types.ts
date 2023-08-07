@@ -12,6 +12,7 @@ export interface ImageInfo {
 export interface ElementImage extends ImageInfo{
     aspectRatio?:number | string,
     main?:boolean,
+    photoGallery?:boolean,
     preview?:boolean
 }
 
