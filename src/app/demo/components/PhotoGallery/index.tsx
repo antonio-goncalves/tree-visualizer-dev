@@ -6,6 +6,7 @@ import Thumbnail from "@/app/demo/components/PhotoGallery/Thumbnail";
 import {ImageInfo, Reference} from "@/app/demo/types";
 import React, {useEffect, useState} from "react";
 import classnames from "classnames";
+import WebUtils from "@/app/demo/components/webUtils";
 
 interface PhotoGalleryProps {
     items:ImageInfo[],
@@ -70,7 +71,12 @@ export default function PhotoGallery({items,className}:PhotoGalleryProps){
     if(_items.length === 0) return null
     return  (
 
-            <ImageGallery items={_items} additionalClass={classnames("photo-gallery",className)} renderItem={renderItem as (item: ReactImageGalleryItem) => React.ReactNode} renderThumbInner={renderThumbInner as (item: ReactImageGalleryItem) => React.ReactNode}  />
+            <ImageGallery
+                items={_items}
+                showFullscreenButton={!WebUtils.isTouchDevice()}
+                additionalClass={classnames("photo-gallery",className)}
+                renderItem={renderItem as (item: ReactImageGalleryItem) => React.ReactNode}
+                renderThumbInner={renderThumbInner as (item: ReactImageGalleryItem) => React.ReactNode}  />
 
     )
 }

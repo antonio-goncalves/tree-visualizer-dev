@@ -5,7 +5,10 @@ export function getNumberFromCSSString(str:string,unit:string = "px"):number{
 
 export default class WebUtils {
     static lockedBody:boolean = false
-
+    static isTouchDevice(){
+        return (('ontouchstart' in window) ||
+            (navigator.maxTouchPoints > 0));
+    }
     static lockBodyScroll(){
 
         if(this.lockedBody) return
