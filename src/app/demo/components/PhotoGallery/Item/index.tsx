@@ -54,7 +54,7 @@ const Item = React.memo(({description,label,reference,src,alt}:ItemProps) => {
         <React.Fragment>
 
             <Image
-                className="image-gallery-image xxx"
+                className="image-gallery-image"
                 src={src}
                 alt={alt}
                 sizes= {`

@@ -1,18 +1,23 @@
 @import "/src/app/styles/variables";
 $ig-blue:$primary;
 @import "react-image-gallery/styles/scss/image-gallery";
+@import "/node_modules/bootstrap/scss/functions";
+@import "/node_modules/bootstrap/scss/variables";
+
 
 $image-height: 400px;
 
 .photo-gallery {
   .image-gallery-content .image-gallery-slide .image-gallery-image {
     max-height: none;
+    background-color: $gray-200;
+    border-radius: $border-radius;
   }
   .image-gallery-slide .image-gallery-description {
     left: 50%;
     bottom: 20px;
     transform: translateX(-50%);
-    background: $dark-color;// rgba(255,255,255,0.1);
+  //  background: $dark-color;// rgba(255,255,255,0.1);
     border-radius: $border-radius;
 
   }
@@ -54,7 +59,7 @@ $image-height: 400px;
       width:100px;
       .image-gallery-thumbnail-image {
         object-fit: contain;
-        background-color: $dark-color;
+        background-color: $gray-200;
       }
     }
 
