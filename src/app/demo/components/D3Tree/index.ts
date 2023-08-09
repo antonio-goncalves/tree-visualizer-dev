@@ -16,14 +16,26 @@ interface D3TreeOptions {
     leftPadding?:number,
     rightPadding?:number
     padding?:number,
-    nodeVerticalDistance?:number
+    nodeVerticalDistance?:number,
+    autoPadding?:boolean
 }
 
 const DEFAULT_PADDING = 100;
 const TEXT_PADDING = 10
 const CIRCLE_RADIUS = 5;
 const CIRCLE_RADIUS_OVER = 7;
-
+//https://stackoverflow.com/a/1349426
+function makeid(length = 6) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
+    }
+    return result;
+}
 
 // Copyright 2021 Observable, Inc.
 // Released under the ISC license.
@@ -31,7 +43,7 @@ const CIRCLE_RADIUS_OVER = 7;
 export default function D3Tree(options:D3TreeOptions):()=>void {
     const {data,svgEl,types} = options
     const typesHashmap:{[k:string]:TreeElementType} = types?.reduce((acc:any,val:TreeElementType)=>({...acc,[val.id]:val}),{}) || {}
-
+    const id = makeid();
     const tree = d3.tree // layout algorithm (typically d3.tree or d3.cluster)
     const sort = undefined // how to sort nodes prior to layout (e.g., (a, b) => d3.descending(a.height, b.height))
     const label =(d:TreeElement)=>d.name // given a node d, returns the display name
@@ -55,11 +67,11 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
 
 
 
-    const leftPadding = options?.leftPadding || options?.padding || DEFAULT_PADDING
-    const rightPadding = options?.rightPadding || options?.padding || DEFAULT_PADDING
+    let leftPadding = options?.leftPadding || options?.padding || DEFAULT_PADDING
+    let rightPadding = options?.rightPadding || options?.padding || DEFAULT_PADDING
 
 
-    const innerWidth = width - (leftPadding + rightPadding)
+
 
     /*
     const root = path != null ? d3.stratify().path(path)(data)
@@ -67,7 +79,52 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
             : d3.hierarchy(data, children);
 */
     const root = d3.hierarchy(data);
+    function getPaddingValues(){
+        if(!options?.autoPadding) return
+        let firstColumnWidth = 0
+        let lastColumnWidth = 0
+        const descendants = root.descendants()
+        const firstColumn = descendants.filter(el=>el.depth === 0)
+        const lastColumn = descendants.filter(el=>el.depth === root.height)
+        const links = document.createElement("div")
+        links.style.opacity = "0";
+        links.style.height = "0px"
+        //links.style.width = "0px"
+        links.id = `${id}-links`
+        const firstColumnDiv = document.createElement("div")
+        const lastColumnDiv = document.createElement("div")
+        const a = document.createElement("a")
+        a.innerHTML = firstColumn[0].data.name
+        firstColumnDiv.appendChild(a)
+        for(const el of lastColumn){
+            const a = document.createElement("a")
+            a.innerHTML = el.data.name
+            lastColumnDiv.appendChild(document.createElement("div"))
+            lastColumnDiv.appendChild(a)
+        }
+        links.appendChild(firstColumnDiv)
+        links.appendChild(lastColumnDiv)
+        document.body.appendChild(links)
+        for(const a of Array.from( firstColumnDiv.querySelectorAll("a"))){
+            const width = a.getBoundingClientRect().width
+            if(width>firstColumnWidth) firstColumnWidth = width
+        }
+        for(const a of Array.from(lastColumnDiv.querySelectorAll("a"))){
+            const width = a.getBoundingClientRect().width
+            if(width>lastColumnWidth) lastColumnWidth = width
+        }
+        leftPadding = firstColumnWidth + TEXT_PADDING;
+        rightPadding = lastColumnWidth + TEXT_PADDING;
+        document.body.removeChild(links)
 
+
+    }
+    getPaddingValues()
+    const innerWidth = width - (leftPadding + rightPadding)
+
+//    console.log(root)
+
+   // return ()=>{}
     // Sort the nodes.
     if (sort != null) root.sort(sort);
 

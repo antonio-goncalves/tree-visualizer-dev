@@ -170,8 +170,8 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
        return (
            <Tree
 
-            leftPadding={65}
-            rightPadding={183}
+            autoPadding={true}
+
               // leftPadding={120}
               // rightPadding={250}
             onNodeClick={onNodeClick}

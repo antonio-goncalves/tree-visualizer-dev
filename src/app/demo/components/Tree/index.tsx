@@ -32,7 +32,8 @@ export interface TreeProps {
     padding?:number,
     leftPadding?:number,
     rightPadding?:number,
-    nodeVerticalDistance?:number
+    nodeVerticalDistance?:number,
+    autoPadding?:boolean
 
 }
 
@@ -54,7 +55,8 @@ export default function Tree({
      onNodeFocusOut,
      onNodeFocusIn,
     treeElementTypes,
-                                 nodeVerticalDistance
+      nodeVerticalDistance,
+    autoPadding
 }:TreeProps){
     const ref = useRef<HTMLDivElement | null>(null)
     const svgRef = useRef<SVGSVGElement | null>(null)
@@ -84,7 +86,8 @@ export default function Tree({
             rightPadding,
             leftPadding,
             padding,
-            nodeVerticalDistance
+            nodeVerticalDistance,
+            autoPadding
         })
 
 

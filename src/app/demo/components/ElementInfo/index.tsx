@@ -80,8 +80,7 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
         return (
 
             <Tree
-                leftPadding={65}
-                rightPadding={183}
+                autoPadding={true}
                 treeElement={treeElement}
                 treeElementTypes={treeElementTypes || []}
                 onNodeClick={_onTreeNodeClick}
