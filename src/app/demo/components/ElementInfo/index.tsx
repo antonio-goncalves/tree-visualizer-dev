@@ -6,6 +6,7 @@ import {HierarchyNode} from "d3";
 import PhotoGallery from "@/app/demo/components/PhotoGallery";
 import PhotoGalleryWithData from "@/app/demo/components/PhotoGalleryWithData";
 import {NodeOptions} from "@/app/demo/components/D3Tree";
+import {useState} from "react";
 
 export interface ElementInfoProps extends ElementDetails{
 
@@ -17,7 +18,8 @@ export interface ElementInfoProps extends ElementDetails{
 export default function ElementInfo({treeElement,type,title,id,description,treeElementTypes,subTitleColor,subTitle,references,onTreeNodeClick}:ElementInfoProps){
 
 
-    console.log(!!treeElement.children?.[0].children?"Y":"N")
+    const [nodeOptions,setNodeOptions] = useState<NodeOptions[] | undefined>(getTreeOptions())
+
     function getTreeOptions():NodeOptions[] | undefined{
         //@ts-ignore
         if(treeElement?.children?.[0].children?.length>0){
@@ -49,15 +51,6 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
 
     function renderTree(){
 
-        const nodeOptions:NodeOptions[] = [
-         /*   {
-                depth:1,
-                y:(n)=>{
-                    return -12
-                }
-            }*/
-        ]
-
         return (
 
             <Tree
@@ -66,7 +59,7 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
                 data={treeElement}
                 types={treeElementTypes || []}
                 onNodeClick={_onTreeNodeClick}
-                nodeOptions={getTreeOptions()}
+                nodeOptions={nodeOptions}
 
             />
 

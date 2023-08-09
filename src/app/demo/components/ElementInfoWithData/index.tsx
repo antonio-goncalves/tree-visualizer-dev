@@ -11,6 +11,9 @@ const fetcher = (url:string) => fetch(url).then((res) => {
     }
     return res.json()
 })
+
+
+
 export default function ElementInfoWithData({id,treeElementTypes,onTreeNodeClick}: { id:string, treeElementTypes?:TreeElementType[],onTreeNodeClick?:(id:string)=>void |undefined }){
 
     const {data,error} = useSWR<ElementDetails>(`/elements/details/${id}`, fetcher)
