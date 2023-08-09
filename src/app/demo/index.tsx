@@ -3,19 +3,12 @@
 
 import styles from './index.module.scss'
 import previewStyles from '/src/app/demo/components/preview/index.module.scss'
-import React from 'react'
-import Tree, {TreeElement, TreeElementType} from "@/app/demo/components/Tree";
-import {CSSProperties, useEffect, useRef, useState} from "react";
-import _treeData from '../treeData'
+import React, {CSSProperties, useEffect, useRef, useState} from 'react'
+import Tree, {ResizeEventStrategy, TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 import {HierarchyNode} from "d3";
-import {FloatingArrow, flip, useFloating, arrow, detectOverflow, shift, autoPlacement} from "@floating-ui/react";
-import Preview from "@/app/demo/components/preview";
 import PreviewWithData from "@/app/demo/components/previewWithData";
 import {getNumberFromCSSString} from "@/app/demo/components/webUtils";
 import classnames from "classnames";
-import useSWR from "swr";
-import {ElementPreview} from "@/app/demo/types";
-import TreeData from "../treeData";
 import ElementInfoModal from "@/app/demo/components/ElementInfoModal";
 
 
@@ -182,8 +175,9 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
             onNodeMouseLeave={onNodeMouseLeave}
             onNodeFocusIn={onNodeMouseEnter}
             onNodeFocusOut={onNodeMouseLeave}
-            treeElement={treeData!}
-            treeElementTypes={treeElementTypes}
+            data={treeData!}
+            types={treeElementTypes}
+            resizeEventStrategy={ResizeEventStrategy.EventListener}
 
            />
        )

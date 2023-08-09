@@ -2,7 +2,7 @@
 import React, { FC, ReactElement } from 'react'
 import {debounce} from 'lodash';
 import {useEffect, useRef} from "react";
-import D3Tree from "@/app/demo/components/D3Tree";
+import D3Tree, {D3TreeBaseOptions} from "@/app/demo/components/D3Tree";
 import {HierarchyNode} from "d3";
 import styles from './index.module.css'
 export interface TreeElement {
@@ -19,21 +19,15 @@ export interface TreeElementType {
     color:string
 }
 
-export interface TreeProps {
-    treeElement:TreeElement,
-    treeElementTypes?:TreeElementType[],
-    onNodeClick?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
-    onNodeMouseOver?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
-    onNodeMouseEnter?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
-    onNodeMouseLeave?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
-    onNodeFocusIn?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
-    onNodeFocusOut?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
+export enum ResizeEventStrategy {
+    ResizeObserver="resizeObserver",
+    EventListener="eventListener"
+}
+
+export interface TreeProps extends D3TreeBaseOptions{
+
     resizeDebounceMS?:number,
-    padding?:number,
-    leftPadding?:number,
-    rightPadding?:number,
-    nodeVerticalDistance?:number,
-    autoPadding?:boolean
+    resizeEventStrategy?:ResizeEventStrategy
 
 }
 
@@ -43,7 +37,7 @@ const DEFAULT_DEBOUNCE_MS = 200;
 
 
 export default function Tree({
-     treeElement,
+     data,
      onNodeClick,
      resizeDebounceMS=DEFAULT_DEBOUNCE_MS,
      padding,
@@ -54,9 +48,10 @@ export default function Tree({
      onNodeMouseLeave,
      onNodeFocusOut,
      onNodeFocusIn,
-    treeElementTypes,
+    types,
       nodeVerticalDistance,
-    autoPadding
+    autoPadding,
+    resizeEventStrategy
 }:TreeProps){
     const ref = useRef<HTMLDivElement | null>(null)
     const svgRef = useRef<SVGSVGElement | null>(null)
@@ -73,9 +68,9 @@ export default function Tree({
         const scrollY = window.scrollY
         removeRef.current?.()
         removeRef.current = D3Tree({
-            data:treeElement,
+            data,
             svgEl:svgRef.current!,
-            types:treeElementTypes,
+            types,
             onNodeClick,
             onNodeMouseOver,
             onNodeMouseEnter,
@@ -112,16 +107,22 @@ export default function Tree({
         console.log("useEffect")
         getD3Tree();
         const _onResize = debounce(onResize,resizeDebounceMS,{trailing:true})
+        let resizeObserver:ResizeObserver | undefined
+        if(resizeEventStrategy === ResizeEventStrategy.EventListener){
+            addEventListener("resize", _onResize as ()=>void);
+        }else {
+            resizeObserver = new ResizeObserver(_onResize as ()=>void)
+            resizeObserver.observe(ref.current!)
+        }
+        //
 
-        addEventListener("resize", _onResize);
-       // const resizeObserver = new ResizeObserver(_onResize as ()=>void)
-        //resizeObserver.observe(ref.current!)
+
         return ()=>{
             removeRef.current?.()
-          //  resizeObserver.disconnect()
-            removeEventListener("resize",_onResize)
+            resizeObserver?.disconnect()
+            removeEventListener("resize",_onResize as ()=>void)
         }
-    },[svgRef,ref,leftPadding,rightPadding,padding,treeElement])
+    },[svgRef,ref,leftPadding,rightPadding,padding,data])
 
 
 

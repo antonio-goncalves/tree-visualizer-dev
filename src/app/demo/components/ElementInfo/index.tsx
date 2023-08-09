@@ -81,8 +81,8 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
 
             <Tree
                 autoPadding={true}
-                treeElement={treeElement}
-                treeElementTypes={treeElementTypes || []}
+                data={treeElement}
+                types={treeElementTypes || []}
                 onNodeClick={_onTreeNodeClick}
             />
 
@@ -90,7 +90,7 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
     }
 
     return (
-        <div>
+        <div style={{border:"1px solid red"}}>
             <h1>{title} - {id}</h1>
             {renderSubTitle()}
             <References references={references} className={"mb-2"} />

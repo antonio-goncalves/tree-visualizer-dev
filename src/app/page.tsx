@@ -1,10 +1,8 @@
-import Image from 'next/image'
-import Tree, {TreeElement, TreeElementType} from "@/app/demo/components/Tree";
-import {useRef} from "react";
+
 import Index from "@/app/demo";
 import {getTree} from "@/app/elements/tree/route";
 import {getLineages} from "@/app/elements/lineage/methods";
-import Modal from "@/app/demo/components/Modal";
+
 
 
 export default async function Home() {

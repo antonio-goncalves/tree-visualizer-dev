@@ -2,23 +2,30 @@ import * as d3 from 'd3'
 import {TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 import {DefaultLinkObject, HierarchyLink, HierarchyNode, Link} from "d3";
 
-interface D3TreeOptions {
+
+export interface D3TreeBaseOptions {
     data:TreeElement,
     types?:TreeElementType[],
-    svgEl:SVGSVGElement,
-    onNodeClick?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
-    onNodeMouseOver?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
-    onNodeMouseEnter?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
-    onNodeMouseLeave?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
-    onNodeFocusIn?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
-    onNodeFocusOut?:(node: HierarchyNode<TreeElement>, el:HTMLAnchorElement,ev:MouseEvent)=>void,
-    width?:number,
-    leftPadding?:number,
-    rightPadding?:number
+    onNodeClick?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeMouseOver?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeMouseEnter?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeMouseLeave?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeFocusIn?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
+    onNodeFocusOut?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
     padding?:number,
+    leftPadding?:number,
+    rightPadding?:number,
     nodeVerticalDistance?:number,
     autoPadding?:boolean
+
 }
+export interface D3TreeOptions extends D3TreeBaseOptions{
+
+
+    svgEl:SVGSVGElement,
+    width?:number,
+}
+
 
 const DEFAULT_PADDING = 100;
 const TEXT_PADDING = 10
@@ -94,11 +101,13 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
         const firstColumnDiv = document.createElement("div")
         const lastColumnDiv = document.createElement("div")
         const a = document.createElement("a")
+        a.style.fontWeight = "bold"
         a.innerHTML = firstColumn[0].data.name
         firstColumnDiv.appendChild(a)
         for(const el of lastColumn){
             const a = document.createElement("a")
             a.innerHTML = el.data.name
+            a.style.fontWeight = "bold"
             lastColumnDiv.appendChild(document.createElement("div"))
             lastColumnDiv.appendChild(a)
         }
@@ -120,6 +129,7 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
 
     }
     getPaddingValues()
+   // return ()=>{}
     const innerWidth = width - (leftPadding + rightPadding)
 
 //    console.log(root)
