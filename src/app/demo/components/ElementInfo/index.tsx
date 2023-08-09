@@ -5,61 +5,32 @@ import References from "@/app/demo/components/References";
 import {HierarchyNode} from "d3";
 import PhotoGallery from "@/app/demo/components/PhotoGallery";
 import PhotoGalleryWithData from "@/app/demo/components/PhotoGalleryWithData";
+import {NodeOptions} from "@/app/demo/components/D3Tree";
 
 export interface ElementInfoProps extends ElementDetails{
 
     treeElementTypes?:TreeElementType[],
     onTreeNodeClick?:(id:string)=>void
 }
-const images:ImageInfo[] = [
-    {
-        alt:"xx",
-        src:"https://static.antonio-goncalves.com/images/test/1.jpg",
-        description:"description",
-        label:"label",
-        reference:{
-            title:"Wikipedia",
-            url:"https://www.wikipedia.com"
-        }
-    },
-    {
-        alt:"xx2",
-        src:"https://static.antonio-goncalves.com/images/test/2.jpg",
-        reference:{
-            title:"Wikipedia",
-            url:"https://www.wikipedia.com"
-        }
-    },
-    {
-        alt:"xx",
-        src:"https://static.antonio-goncalves.com/images/test/3.jpg",
-        reference:{
-            title:"Wikipedia",
-            url:"https://www.wikipedia.com"
-        }
-    },
-    {
-        alt:"xx",
-        src:"https://static.antonio-goncalves.com/images/test/4.jpg",
-        reference:{
-            title:"Wikipedia",
-            url:"https://www.wikipedia.com"
-        }
-    },
-    {
-        alt:"xx",
-        src:"https://static.antonio-goncalves.com/images/test/5.jpg",
-        reference:{
-            title:"Wikipedia",
-            url:"https://www.wikipedia.com"
-        }
-    }
-]
-
 
 
 export default function ElementInfo({treeElement,type,title,id,description,treeElementTypes,subTitleColor,subTitle,references,onTreeNodeClick}:ElementInfoProps){
 
+
+    console.log(!!treeElement.children?.[0].children?"Y":"N")
+    function getTreeOptions():NodeOptions[] | undefined{
+        //@ts-ignore
+        if(treeElement?.children?.[0].children?.length>0){
+            return [
+                {
+                    depth: 1,
+                    y: (n) => {
+                        return -12
+                    }
+                }
+            ]
+        }
+    }
     function renderParagraphs(){
         const paragraphs = description.split("\n")
         return paragraphs.map((p,i)=>(
@@ -77,21 +48,34 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
     }
 
     function renderTree(){
+
+        const nodeOptions:NodeOptions[] = [
+         /*   {
+                depth:1,
+                y:(n)=>{
+                    return -12
+                }
+            }*/
+        ]
+
         return (
 
             <Tree
                 autoPadding={true}
+                selectedElement={id}
                 data={treeElement}
                 types={treeElementTypes || []}
                 onNodeClick={_onTreeNodeClick}
+                nodeOptions={getTreeOptions()}
+
             />
 
         )
     }
 
     return (
-        <div style={{border:"1px solid red"}}>
-            <h1>{title} - {id}</h1>
+        <div style={{border:"0px solid red"}}>
+            <h1>{title}</h1>
             {renderSubTitle()}
             <References references={references} className={"mb-2"} />
             {renderParagraphs()}

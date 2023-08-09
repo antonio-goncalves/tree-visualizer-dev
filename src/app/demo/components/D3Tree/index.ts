@@ -3,8 +3,18 @@ import {TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 import {DefaultLinkObject, HierarchyLink, HierarchyNode, Link} from "d3";
 
 
+
+//HierarchyNode<TreeElement>
+
+export interface NodeOptions {
+    depth?:number,
+    hide?:boolean,
+    y?:(node:HierarchyNode<TreeElement>)=>number
+}
+
 export interface D3TreeBaseOptions {
     data:TreeElement,
+    selectedElement?:string,
     types?:TreeElementType[],
     onNodeClick?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
     onNodeMouseOver?:(node: HierarchyNode<TreeElement>,el:HTMLAnchorElement,ev:MouseEvent)=>void,
@@ -16,7 +26,8 @@ export interface D3TreeBaseOptions {
     leftPadding?:number,
     rightPadding?:number,
     nodeVerticalDistance?:number,
-    autoPadding?:boolean
+    autoPadding?:boolean,
+    nodeOptions?:NodeOptions[] | undefined
 
 }
 export interface D3TreeOptions extends D3TreeBaseOptions{
@@ -30,7 +41,7 @@ export interface D3TreeOptions extends D3TreeBaseOptions{
 const DEFAULT_PADDING = 100;
 const TEXT_PADDING = 10
 const CIRCLE_RADIUS = 5;
-const CIRCLE_RADIUS_OVER = 7;
+const CIRCLE_RADIUS_BIG = 7;
 //https://stackoverflow.com/a/1349426
 function makeid(length = 6) {
     let result = '';
@@ -49,6 +60,7 @@ function makeid(length = 6) {
 // https://observablehq.com/@d3/tree
 export default function D3Tree(options:D3TreeOptions):()=>void {
     const {data,svgEl,types} = options
+
     const typesHashmap:{[k:string]:TreeElementType} = types?.reduce((acc:any,val:TreeElementType)=>({...acc,[val.id]:val}),{}) || {}
     const id = makeid();
     const tree = d3.tree // layout algorithm (typically d3.tree or d3.cluster)
@@ -64,7 +76,15 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
     const strokeOpacity =1// 0.4 // stroke opacity for links
     const haloWidth = 3 // padding around the labels
     const curve = d3.curveBumpX // curve for the link
+    const nodeOptions = options?.nodeOptions || []
+    const nodeOptionsHM : {[k:number]:NodeOptions | undefined} = nodeOptions.reduce((a:{[k:number]:NodeOptions},v:NodeOptions)=>{
+       const i = typeof v.depth === "number" ?v.depth:-1
+       return {...a,[i]:v}
+    },{})
 
+    function getDepthOptions(depth:number):NodeOptions | undefined{
+        return nodeOptionsHM[depth] || nodeOptionsHM[-1]
+    }
 
     let height:number | undefined =undefined
     // If id and parentId options are specified, or the path option, use d3.stratify
@@ -88,42 +108,42 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
     const root = d3.hierarchy(data);
     function getPaddingValues(){
         if(!options?.autoPadding) return
-        let firstColumnWidth = 0
-        let lastColumnWidth = 0
+        let firstBranchWidth = 0
+        let lastBranchWidth = 0
         const descendants = root.descendants()
-        const firstColumn = descendants.filter(el=>el.depth === 0)
-        const lastColumn = descendants.filter(el=>el.depth === root.height)
+        const firstBranch = descendants.filter(el=>el.depth === 0)
+        const lastBranch = descendants.filter(el=>el.depth === root.height)
         const links = document.createElement("div")
         links.style.opacity = "0";
         links.style.height = "0px"
         //links.style.width = "0px"
         links.id = `${id}-links`
-        const firstColumnDiv = document.createElement("div")
-        const lastColumnDiv = document.createElement("div")
+        const firstBranchDiv = document.createElement("div")
+        const lastBranchDiv = document.createElement("div")
         const a = document.createElement("a")
         a.style.fontWeight = "bold"
-        a.innerHTML = firstColumn[0].data.name
-        firstColumnDiv.appendChild(a)
-        for(const el of lastColumn){
+        a.innerHTML = firstBranch[0].data.name
+        firstBranchDiv.appendChild(a)
+        for(const el of lastBranch){
             const a = document.createElement("a")
             a.innerHTML = el.data.name
             a.style.fontWeight = "bold"
-            lastColumnDiv.appendChild(document.createElement("div"))
-            lastColumnDiv.appendChild(a)
+            lastBranchDiv.appendChild(document.createElement("div"))
+            lastBranchDiv.appendChild(a)
         }
-        links.appendChild(firstColumnDiv)
-        links.appendChild(lastColumnDiv)
+        links.appendChild(firstBranchDiv)
+        links.appendChild(lastBranchDiv)
         document.body.appendChild(links)
-        for(const a of Array.from( firstColumnDiv.querySelectorAll("a"))){
+        for(const a of Array.from( firstBranchDiv.querySelectorAll("a"))){
             const width = a.getBoundingClientRect().width
-            if(width>firstColumnWidth) firstColumnWidth = width
+            if(width>firstBranchWidth) firstBranchWidth = width
         }
-        for(const a of Array.from(lastColumnDiv.querySelectorAll("a"))){
+        for(const a of Array.from(lastBranchDiv.querySelectorAll("a"))){
             const width = a.getBoundingClientRect().width
-            if(width>lastColumnWidth) lastColumnWidth = width
+            if(width>lastBranchWidth) lastBranchWidth = width
         }
-        leftPadding = firstColumnWidth + TEXT_PADDING;
-        rightPadding = lastColumnWidth + TEXT_PADDING;
+        leftPadding = firstBranchWidth + TEXT_PADDING;
+        rightPadding = lastBranchWidth + TEXT_PADDING;
         document.body.removeChild(links)
 
 
@@ -207,7 +227,7 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
 
     function nodeFocusIn(ev: MouseEvent){
         const element = ev.currentTarget as HTMLAnchorElement
-        element?.querySelector("circle")?.setAttribute("r",CIRCLE_RADIUS_OVER.toString())
+        element?.querySelector("circle")?.setAttribute("r",CIRCLE_RADIUS_BIG.toString())
         element?.querySelector("text")?.setAttribute("font-weight","bold")
     }
 
@@ -248,20 +268,24 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
         .on("mouseenter",   (ev:MouseEvent,el)=>{
             const element = ev.currentTarget as HTMLAnchorElement
             options?.onNodeMouseEnter?.(el,element,ev)
+            if(el.data.id === options.selectedElement) return
             nodeFocusIn(ev)
         })
         .on("mouseleave",(ev:MouseEvent,el)=>{
             const element = ev.currentTarget as HTMLAnchorElement
             options?.onNodeMouseLeave?.(el,element,ev)
+            if(el.data.id === options.selectedElement) return
             nodeFocusOut(ev)
         }).on("focusin",(ev:MouseEvent,el)=>{
             const element = ev.currentTarget as HTMLAnchorElement
             options?.onNodeFocusIn?.(el,element,ev)
+            if(el.data.id === options.selectedElement) return
             nodeFocusIn(ev)
         })
         .on("focusout",(ev:MouseEvent,el)=>{
             const element = ev.currentTarget as HTMLAnchorElement
             options?.onNodeFocusOut?.(el,element,ev)
+            if(el.data.id === options.selectedElement) return
             nodeFocusOut(ev)
         })
 
@@ -270,15 +294,25 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
             const color = getColorFromTreeElement(d.data)
             return color || fill
         })
-        .attr("r", CIRCLE_RADIUS);
+        .attr("r", d=>{
+            if(d.data.id === options.selectedElement) return CIRCLE_RADIUS_BIG
+            return CIRCLE_RADIUS
+        });
 
 
 
     if(L) node.append("text")
         .attr("dy", "0.32em")
+        .attr("y",d=>{
+           return getDepthOptions(d.depth)?.y?.(d) || null
+        })
         .attr("x", d => d.children ? -TEXT_PADDING : TEXT_PADDING)
         .attr("text-anchor", d => d.children ? "end" : "start")
         .attr("paint-order", "stroke")
+        .attr("font-weight",d=>{
+            if(d.data.id === options.selectedElement) return "bold"
+            return null
+        })
        // .attr("stroke", halo) //Bug with gesture zoom
         .attr("stroke-width", haloWidth)
         .text(()=>"text")

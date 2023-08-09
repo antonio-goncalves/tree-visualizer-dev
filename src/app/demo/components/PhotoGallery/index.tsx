@@ -28,7 +28,6 @@ export default function PhotoGallery({items,className}:PhotoGalleryProps){
 
     function renderItem(item:ReactImageGalleryItemExtra){
         const {label,thumbnail,originalAlt,reference,original,description} = item
-            console.log("originalAlt",originalAlt)
             return (
                 <Item
                     src={original}
@@ -43,7 +42,7 @@ export default function PhotoGallery({items,className}:PhotoGalleryProps){
     }
 
     function renderThumbInner(item:ReactImageGalleryItemExtra){
-        console.log("renderThumbInner",item)
+
         const {original,originalAlt,label} = item
         return (
             <Thumbnail

@@ -7,7 +7,7 @@ interface ThumbnailProps {
 }
 
 export default function Thumbnail({label,src,alt}:ThumbnailProps){
-    console.log("Thumbnail",label,src,alt)
+
     return (
         <span className="image-gallery-thumbnail-inner">
         <Image

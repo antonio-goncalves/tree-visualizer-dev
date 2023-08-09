@@ -51,7 +51,9 @@ export default function Tree({
     types,
       nodeVerticalDistance,
     autoPadding,
-    resizeEventStrategy
+    resizeEventStrategy,
+    nodeOptions,
+    selectedElement
 }:TreeProps){
     const ref = useRef<HTMLDivElement | null>(null)
     const svgRef = useRef<SVGSVGElement | null>(null)
@@ -64,7 +66,6 @@ export default function Tree({
 
 
     function getD3Tree():void{
-        console.log("getD3Tree")
         const scrollY = window.scrollY
         removeRef.current?.()
         removeRef.current = D3Tree({
@@ -82,7 +83,9 @@ export default function Tree({
             leftPadding,
             padding,
             nodeVerticalDistance,
-            autoPadding
+            autoPadding,
+            nodeOptions,
+            selectedElement
         })
 
 
@@ -95,7 +98,6 @@ export default function Tree({
 
 
     function onResize(){
-        console.log("resize")
         getD3Tree()
     }
 
@@ -104,7 +106,6 @@ export default function Tree({
 
 
         if(!svgRef.current || !ref.current) return
-        console.log("useEffect")
         getD3Tree();
         const _onResize = debounce(onResize,resizeDebounceMS,{trailing:true})
         let resizeObserver:ResizeObserver | undefined
@@ -126,7 +127,7 @@ export default function Tree({
 
 
 
-
+    console.log("render tree")
     return (
         <div ref={ref} className={styles.container}>
             <svg ref={svgRef} />
