@@ -5,8 +5,8 @@ import References from "@/app/demo/components/References";
 import {HierarchyNode} from "d3";
 import PhotoGalleryWithData from "@/app/demo/components/PhotoGalleryWithData";
 import {CIRCLE_RADIUS_BIG, NodeOptions} from "@/app/demo/components/D3Tree";
-import {useEffect, useState} from "react";
-
+import {useEffect, useRef, useState} from "react";
+import {debounce} from 'lodash';
 export interface ElementInfoProps extends ElementDetails{
 
     treeElementTypes?:TreeElementType[],
@@ -19,19 +19,38 @@ interface TreeState {
     leftPadding?:number | undefined
 
 }
-
+const BREAKPOINT = 768
 export default function ElementInfo({treeElement,type,title,id,description,treeElementTypes,subTitleColor,subTitle,references,onTreeNodeClick}:ElementInfoProps){
 
     const [treeState, setTreeState] = useState<TreeState | null>(null)
+    const windowWidthRef = useRef<number>(window.innerWidth)
+
+    const [showFirstTreeNode,setShowFirstTreeNode] = useState<boolean>(windowWidthRef.current>=BREAKPOINT)
 
     useEffect(()=>{
         const nodeOptions = getTreeOptions()
+        console.log(showFirstTreeNode)
         setTreeState({
             data:treeElement,
             nodeOptions,
-            leftPadding:!!nodeOptions?CIRCLE_RADIUS_BIG:undefined
+            leftPadding:(!!nodeOptions && !showFirstTreeNode)?CIRCLE_RADIUS_BIG:undefined
         })
-    },[treeElement])
+    },[treeElement,showFirstTreeNode])
+
+    useEffect(()=>{
+        function onResize(){
+
+            if(window.innerWidth>= BREAKPOINT && !showFirstTreeNode) setShowFirstTreeNode(true)
+            if(window.innerWidth< BREAKPOINT && showFirstTreeNode) setShowFirstTreeNode(false)
+        }
+        const _onResize = debounce(onResize,250)
+        addEventListener("resize", _onResize as ()=>void);
+        return ()=>{
+            window.removeEventListener("resize",_onResize as ()=>void)
+        }
+
+    },[showFirstTreeNode])
+
     function getTreeOptions():NodeOptions[] | undefined{
         //@ts-ignore
         if(treeElement?.children?.[0].children?.length>0){
