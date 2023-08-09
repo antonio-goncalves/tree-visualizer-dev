@@ -2,7 +2,7 @@
 $ig-blue:$primary;
 @import "react-image-gallery/styles/scss/image-gallery";
 
-
+$image-height: 400px;
 
 .photo-gallery {
   .image-gallery-content .image-gallery-slide .image-gallery-image {
@@ -29,7 +29,7 @@ $ig-blue:$primary;
     }
   }
   .image-gallery-slide-wrapper {
-    height: 400px;
+    height: $image-height;
     .image-gallery-swipe {
       height: 100%;
     }

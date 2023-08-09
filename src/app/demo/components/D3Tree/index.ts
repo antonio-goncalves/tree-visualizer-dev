@@ -59,6 +59,7 @@ function makeid(length = 6) {
 // Released under the ISC license.
 // https://observablehq.com/@d3/tree
 export default function D3Tree(options:D3TreeOptions):()=>void {
+    console.log("D3Tree")
     const {data,svgEl,types} = options
 
     const typesHashmap:{[k:string]:TreeElementType} = types?.reduce((acc:any,val:TreeElementType)=>({...acc,[val.id]:val}),{}) || {}

@@ -106,6 +106,7 @@ export default function Tree({
 
 
         if(!svgRef.current || !ref.current) return
+
         getD3Tree();
         const _onResize = debounce(onResize,resizeDebounceMS,{trailing:true})
         let resizeObserver:ResizeObserver | undefined
@@ -123,11 +124,11 @@ export default function Tree({
             resizeObserver?.disconnect()
             removeEventListener("resize",_onResize as ()=>void)
         }
-    },[svgRef,ref,leftPadding,rightPadding,padding,data])
+    },[svgRef,ref,leftPadding,rightPadding,padding,data,nodeOptions])
 
 
 
-    console.log("render tree")
+
     return (
         <div ref={ref} className={styles.container}>
             <svg ref={svgRef} />

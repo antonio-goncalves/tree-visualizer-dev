@@ -1,12 +1,11 @@
-import Tree, {TreeElement, TreeElementType} from "@/app/demo/components/Tree";
+import Tree, {ResizeEventStrategy, TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 import classnames from "classnames";
-import {ElementDetails, ImageInfo, Reference} from "@/app/demo/types";
+import {ElementDetails} from "@/app/demo/types";
 import References from "@/app/demo/components/References";
 import {HierarchyNode} from "d3";
-import PhotoGallery from "@/app/demo/components/PhotoGallery";
 import PhotoGalleryWithData from "@/app/demo/components/PhotoGalleryWithData";
 import {NodeOptions} from "@/app/demo/components/D3Tree";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export interface ElementInfoProps extends ElementDetails{
 
@@ -14,12 +13,23 @@ export interface ElementInfoProps extends ElementDetails{
     onTreeNodeClick?:(id:string)=>void
 }
 
+interface TreeState {
+    data:TreeElement,
+    nodeOptions:NodeOptions[] | undefined
+
+}
 
 export default function ElementInfo({treeElement,type,title,id,description,treeElementTypes,subTitleColor,subTitle,references,onTreeNodeClick}:ElementInfoProps){
 
+    const [treeState, setTreeState] = useState<TreeState | null>(null)
 
-    const [nodeOptions,setNodeOptions] = useState<NodeOptions[] | undefined>(getTreeOptions())
+    useEffect(()=>{
 
+        setTreeState({
+            data:treeElement,
+            nodeOptions:getTreeOptions()
+        })
+    },[treeElement])
     function getTreeOptions():NodeOptions[] | undefined{
         //@ts-ignore
         if(treeElement?.children?.[0].children?.length>0){
@@ -50,22 +60,22 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
     }
 
     function renderTree(){
-
+        if(!treeState) return null
         return (
 
             <Tree
                 autoPadding={true}
                 selectedElement={id}
-                data={treeElement}
+                resizeEventStrategy={ResizeEventStrategy.EventListener}
                 types={treeElementTypes || []}
                 onNodeClick={_onTreeNodeClick}
-                nodeOptions={nodeOptions}
+                {...treeState}
 
             />
 
         )
     }
-
+    console.log("render ElementInfo",treeState)
     return (
         <div style={{border:"0px solid red"}}>
             <h1>{title}</h1>
