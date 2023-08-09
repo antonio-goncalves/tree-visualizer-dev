@@ -40,8 +40,8 @@ export interface D3TreeOptions extends D3TreeBaseOptions{
 
 const DEFAULT_PADDING = 100;
 const TEXT_PADDING = 10
-const CIRCLE_RADIUS = 5;
-const CIRCLE_RADIUS_BIG = 7;
+export const CIRCLE_RADIUS = 5;
+export const CIRCLE_RADIUS_BIG = 7;
 //https://stackoverflow.com/a/1349426
 function makeid(length = 6) {
     let result = '';
@@ -95,8 +95,8 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
 
 
 
-    let leftPadding = options?.leftPadding || options?.padding || DEFAULT_PADDING
-    let rightPadding = options?.rightPadding || options?.padding || DEFAULT_PADDING
+    let leftPadding =  DEFAULT_PADDING
+    let rightPadding =  DEFAULT_PADDING
 
 
 
@@ -144,12 +144,17 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
             if(width>lastBranchWidth) lastBranchWidth = width
         }
         leftPadding = firstBranchWidth + TEXT_PADDING;
-        rightPadding = lastBranchWidth + TEXT_PADDING;
+        rightPadding =lastBranchWidth + TEXT_PADDING;
+    //    leftPadding = nodeOptionsHM[0]?.hide?CIRCLE_RADIUS_BIG: firstBranchWidth + TEXT_PADDING;
+     //   rightPadding =nodeOptionsHM[root.height]?.hide?CIRCLE_RADIUS_BIG: lastBranchWidth + TEXT_PADDING;
         document.body.removeChild(links)
 
 
     }
     getPaddingValues()
+
+    leftPadding = options?.leftPadding || options?.padding || leftPadding
+    rightPadding = options?.rightPadding || options?.padding || rightPadding
    // return ()=>{}
     const innerWidth = width - (leftPadding + rightPadding)
 

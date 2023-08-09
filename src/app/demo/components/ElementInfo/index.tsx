@@ -4,7 +4,7 @@ import {ElementDetails} from "@/app/demo/types";
 import References from "@/app/demo/components/References";
 import {HierarchyNode} from "d3";
 import PhotoGalleryWithData from "@/app/demo/components/PhotoGalleryWithData";
-import {NodeOptions} from "@/app/demo/components/D3Tree";
+import {CIRCLE_RADIUS_BIG, NodeOptions} from "@/app/demo/components/D3Tree";
 import {useEffect, useState} from "react";
 
 export interface ElementInfoProps extends ElementDetails{
@@ -15,7 +15,8 @@ export interface ElementInfoProps extends ElementDetails{
 
 interface TreeState {
     data:TreeElement,
-    nodeOptions:NodeOptions[] | undefined
+    nodeOptions:NodeOptions[] | undefined,
+    leftPadding?:number | undefined
 
 }
 
@@ -24,16 +25,21 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
     const [treeState, setTreeState] = useState<TreeState | null>(null)
 
     useEffect(()=>{
-
+        const nodeOptions = getTreeOptions()
         setTreeState({
             data:treeElement,
-            nodeOptions:getTreeOptions()
+            nodeOptions,
+            leftPadding:!!nodeOptions?CIRCLE_RADIUS_BIG:undefined
         })
     },[treeElement])
     function getTreeOptions():NodeOptions[] | undefined{
         //@ts-ignore
         if(treeElement?.children?.[0].children?.length>0){
             return [
+                {
+                  depth:1,
+                  hide:true
+                },
                 {
                     depth: 1,
                     y: (n) => {
@@ -69,6 +75,7 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
                 resizeEventStrategy={ResizeEventStrategy.EventListener}
                 types={treeElementTypes || []}
                 onNodeClick={_onTreeNodeClick}
+
                 {...treeState}
 
             />
