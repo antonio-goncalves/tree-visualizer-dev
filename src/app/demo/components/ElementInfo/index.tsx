@@ -103,10 +103,10 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
     }
     console.log("render ElementInfo",treeState)
     return (
-        <div style={{border:"0px solid red"}}>
+        <div >
             <h1>{title}</h1>
             {renderSubTitle()}
-            <References references={references} className={"mb-2"} />
+            <References autoFocus={true} references={references} className={"mb-2"} />
             {renderParagraphs()}
             <PhotoGalleryWithData className={"mt-4 mb-4"} id={id} />
             {renderTree()}

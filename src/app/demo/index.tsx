@@ -10,6 +10,7 @@ import PreviewWithData from "@/app/demo/components/previewWithData";
 import {getNumberFromCSSString} from "@/app/demo/components/webUtils";
 import classnames from "classnames";
 import ElementInfoModal from "@/app/demo/components/ElementInfoModal";
+import References from "@/app/demo/components/References";
 
 
 const popOverWidth = getNumberFromCSSString(previewStyles.popOverWidth);
@@ -265,11 +266,13 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
 
     function renderInfo(){
         return (
-            <div style={{top:0,left:0,zIndex:3000,backgroundColor:"white",padding:20,border:"1px solid black"}} className={"position-fixed"}>
-                <p>Hovered element: {hoveredElement}</p>
-                <p>Selected element: {selectedElement}</p>
-                <p>Position: X: {popOverPosition?.x} Y: {popOverPosition?.y}</p>
-            </div>
+          <header className={"p-2 p-md-0 mt-2"}>
+            <h1 >The phylogenetic relationships of living felids</h1>
+              <References references={[
+                  {title:"Wikipedia",url:"https://en.wikipedia.org/w/index.php?title=Felidae&oldid=1160456585#Classification"}
+              ]}/>
+              <p></p>
+          </header>
         )
     }
 
@@ -299,7 +302,7 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
 
     return (
         <div className={styles.container}>
-
+            {renderInfo()}
 
             {renderTree()}
             {renderPopOver()}

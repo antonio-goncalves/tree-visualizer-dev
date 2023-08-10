@@ -130,7 +130,7 @@ export default function Tree({
 
 
     return (
-        <div ref={ref} className={styles.container}>
+        <div ref={ref}  className={styles.container}>
             <svg ref={svgRef} />
         </div>
     )

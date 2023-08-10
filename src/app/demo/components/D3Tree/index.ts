@@ -145,8 +145,6 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
         }
         leftPadding = firstBranchWidth + TEXT_PADDING;
         rightPadding =lastBranchWidth + TEXT_PADDING;
-    //    leftPadding = nodeOptionsHM[0]?.hide?CIRCLE_RADIUS_BIG: firstBranchWidth + TEXT_PADDING;
-     //   rightPadding =nodeOptionsHM[root.height]?.hide?CIRCLE_RADIUS_BIG: lastBranchWidth + TEXT_PADDING;
         document.body.removeChild(links)
 
 
