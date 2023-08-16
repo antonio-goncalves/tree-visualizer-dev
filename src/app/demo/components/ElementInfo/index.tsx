@@ -29,7 +29,6 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
 
     useEffect(()=>{
         const nodeOptions = getTreeOptions()
-        console.log(showFirstTreeNode)
         setTreeState({
             data:treeElement,
             nodeOptions,
@@ -101,7 +100,7 @@ export default function ElementInfo({treeElement,type,title,id,description,treeE
 
         )
     }
-    console.log("render ElementInfo",treeState)
+
     return (
         <div >
             <h1>{title}</h1>

@@ -3,7 +3,7 @@
 
 import styles from './index.module.scss'
 import previewStyles from '/src/app/demo/components/preview/index.module.scss'
-import React, {CSSProperties, useEffect, useRef, useState} from 'react'
+import React, {CSSProperties, useCallback, useEffect, useRef, useState} from 'react'
 import Tree, {ResizeEventStrategy, TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 import {HierarchyNode} from "d3";
 import PreviewWithData from "@/app/demo/components/previewWithData";
@@ -11,6 +11,7 @@ import {getNumberFromCSSString} from "@/app/demo/components/webUtils";
 import classnames from "classnames";
 import ElementInfoModal from "@/app/demo/components/ElementInfoModal";
 import References from "@/app/demo/components/References";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 
 const popOverWidth = getNumberFromCSSString(previewStyles.popOverWidth);
@@ -46,12 +47,32 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
 
     const popoverRef = useRef<HTMLDivElement | null>(null)
     const [hoveredElement,setHoveredElement] = useState<string | null>(null)
-    const [selectedElement,setSelectedElement] = useState<string | null>(null)
+    const [selectedElement,_setSelectedElement] = useState<string | null>(null)
     const [popOverPosition,setPopOverPosition] = useState<PopOverPosition | null>()
     const [anchorPosition,setAnchorPosition] = useState<AnchorPosition | null>()
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()!
+    const createQueryString = useCallback(
+        (name: string, value: string | null) => {
+            //@ts-ignore
+            const params = new URLSearchParams(searchParams)
+            if(value) params.set(name, value); else params.delete(name);
+            return params.toString()
+        },
+        [searchParams]
+    )
 
-  //  const {data,error} = useSWR<TreeElement>("/elements/tree", fetcher)
+    useEffect(()=>{
+        const idFromURL = searchParams.get("id")
+        if(idFromURL !== selectedElement) _setSelectedElement(idFromURL)
+    },[searchParams])
 
+    function setSelectedElement(id:string|null){
+        _setSelectedElement(id)
+        router.push(pathname + '?' + createQueryString('id', id))
+
+    }
 
     useEffect(()=>{
 
