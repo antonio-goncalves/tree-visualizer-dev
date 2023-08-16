@@ -106,11 +106,12 @@ export async function GET(request: NextRequest, context: { params: {id:string}})
     //@ts-ignore
     const childImages = res.filter(el=>el.children?.images).map(el=>el.children!.images!) as ElementImage[]
     const images:ElementImage[] =[ ...parentImages,...childImages]
+   //   await new Promise(resolve=>setTimeout(resolve,3000))
     return NextResponse.json(images.filter(el=>el.photoGallery))
 
    // const images = entry.images.filter(el=>el.photoGallery)
 
-   //  await new Promise(resolve=>setTimeout(resolve,3000))
+
     //return NextResponse.json(images)
 
 }

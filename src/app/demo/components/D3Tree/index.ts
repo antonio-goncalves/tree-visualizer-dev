@@ -244,6 +244,7 @@ export default function D3Tree(options:D3TreeOptions):()=>void {
         .selectAll("a")
         .data(root.descendants())
         .join("a")
+
         //.attr("xlink:href", link == null ? null : d => link(d.data, d))
         //.attr("target", link == null ? null : linkTarget)
         .attr("transform", (d:any) => `translate(${d.y},${d.x})`)

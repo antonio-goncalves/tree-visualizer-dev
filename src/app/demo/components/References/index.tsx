@@ -1,6 +1,6 @@
 import {Reference} from "@/app/demo/types";
 import {useEffect, useRef} from "react";
-
+import React from 'react'
 
 interface ReferencesProps {
     references?:Reference[] | Reference | undefined,
@@ -18,7 +18,7 @@ export default function References({references,className,autoFocus}:ReferencesPr
     const _references = Array.isArray(references)?references:[references]
     const title = _references.length>1?"Sources":"Source"
     const links = _references.map((el,i)=>(
-        <><a key={i}  target={"_blank"} href={el.url} >{el.title}</a>{i<_references.length-1?", ":""}</>
+        <React.Fragment key={i}><a   target={"_blank"} href={el.url} >{el.title}</a>{i<_references.length-1?", ":""}</React.Fragment>
     ))
     return (
         <p ref={ref} className={className}>
