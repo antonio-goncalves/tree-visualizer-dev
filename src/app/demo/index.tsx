@@ -7,7 +7,7 @@ import React, {CSSProperties, useCallback, useEffect, useRef, useState} from 're
 import Tree, {ResizeEventStrategy, TreeElement, TreeElementType} from "@/app/demo/components/Tree";
 import {HierarchyNode} from "d3";
 import PreviewWithData from "@/app/demo/components/previewWithData";
-import {getNumberFromCSSString} from "@/app/demo/components/webUtils";
+import WebUtils, {getNumberFromCSSString} from "@/app/demo/components/webUtils";
 import classnames from "classnames";
 import ElementInfoModal from "@/app/demo/components/ElementInfoModal";
 import References from "@/app/demo/components/References";
@@ -63,6 +63,8 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
         [searchParams]
     )
 
+
+
     useEffect(()=>{
         const idFromURL = searchParams.get("id")
         if(idFromURL !== selectedElement) _setSelectedElement(idFromURL)
@@ -70,7 +72,7 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
 
     function setSelectedElement(id:string|null){
         _setSelectedElement(id)
-        router.push(pathname + '?' + createQueryString('id', id))
+        router.push(pathname + '?' + createQueryString('id', id),{scroll:false})
 
     }
 
@@ -323,8 +325,8 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
 
     return (
         <div className={styles.container}>
-            {renderInfo()}
 
+            {renderInfo()}
             {renderTree()}
             {renderPopOver()}
             {renderModal()}

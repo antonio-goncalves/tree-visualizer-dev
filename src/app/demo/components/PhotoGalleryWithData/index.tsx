@@ -14,7 +14,6 @@ const fetcher = (url:string) => fetch(url).then((res) => {
 export default function PhotoGalleryWithData({id,className}:{id:string,className?:string}){
     const {data,error} = useSWR<ImageInfo[]>(`/elements/images/${id}`, fetcher)
 
-
     if(error){
         return <div>Error</div>
     }

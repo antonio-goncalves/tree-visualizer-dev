@@ -34,6 +34,12 @@ export default function Modal({isOpen,onClose,children}:ModalProps){
     }
 
     useEffect(()=>{
+        return ()=>{
+            WebUtils.unLockBodyScroll()
+        }
+    },[])
+
+    useEffect(()=>{
         if(isOpen && !ref.current?.open) showModal()
         if(!isOpen && ref.current?.open) closeModal()
     },[isOpen])
