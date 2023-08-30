@@ -120,11 +120,12 @@ export default function Tree({
 
 
         return ()=>{
+
             removeRef.current?.()
             resizeObserver?.disconnect()
             removeEventListener("resize",_onResize as ()=>void)
         }
-    },[svgRef,ref,leftPadding,rightPadding,padding,data,nodeOptions])
+    },[svgRef,ref,leftPadding,rightPadding,padding,nodeOptions])
 
 
 
