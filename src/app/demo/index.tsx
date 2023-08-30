@@ -322,6 +322,13 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
     }
 
 
+    function renderBadge(){
+        return (
+            <p className={classnames(styles.badge,"mb-0","pt-1 pb-1 ps-2 pe-2 small")}>
+                Developed By: <a target={"_blank"} rel={"noreferrer"} href={"https://www.antonio-goncalves.com"}>antonio-goncalves.com</a>
+            </p>
+        )
+    }
 
     return (
         <div className={styles.container}>
@@ -330,6 +337,7 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
             {renderTree()}
             {renderPopOver()}
             {renderModal()}
+            {renderBadge()}
         </div>
 
     )

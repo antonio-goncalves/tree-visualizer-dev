@@ -1,3 +1,4 @@
+@import "/src/app/styles/variables";
 @import "/node_modules/bootstrap/scss/functions";
 @import "/node_modules/bootstrap/scss/variables";
 
@@ -15,11 +16,21 @@
     fill:$light;
 }
 
+.badge {
+    position:fixed;
+    bottom:0;
+    right:0;
+    background-color:rgba($gray-200, 0.9);
+    border-top-left-radius: $border-radius;
+
+}
+
 .container {
     padding:0 60px;
     //border:1px solid green;
     position:relative;
     overflow: hidden;
+    margin-bottom:30px;
 }
 
 .arrow {
