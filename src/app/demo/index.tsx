@@ -186,7 +186,7 @@ export default function Index({treeData,treeElementTypes}:IndexProps){
     function renderTree(){
        return (
            <Tree
-
+                _disableUseEffect={true}
             autoPadding={true}
 
               // leftPadding={120}

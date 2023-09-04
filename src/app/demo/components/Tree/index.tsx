@@ -27,7 +27,8 @@ export enum ResizeEventStrategy {
 export interface TreeProps extends D3TreeBaseOptions{
 
     resizeDebounceMS?:number,
-    resizeEventStrategy?:ResizeEventStrategy
+    resizeEventStrategy?:ResizeEventStrategy,
+    _disableUseEffect?:boolean
 
 }
 
@@ -53,7 +54,8 @@ export default function Tree({
     autoPadding,
     resizeEventStrategy,
     nodeOptions,
-    selectedElement
+    selectedElement,
+    _disableUseEffect
 }:TreeProps){
     const ref = useRef<HTMLDivElement | null>(null)
     const svgRef = useRef<SVGSVGElement | null>(null)
@@ -125,7 +127,7 @@ export default function Tree({
             resizeObserver?.disconnect()
             removeEventListener("resize",_onResize as ()=>void)
         }
-    },[/*svgRef,ref,leftPadding,rightPadding,padding,nodeOptions,data*/])
+    },_disableUseEffect?[]:[svgRef,ref,leftPadding,rightPadding,padding,nodeOptions,data])
 
 
 
