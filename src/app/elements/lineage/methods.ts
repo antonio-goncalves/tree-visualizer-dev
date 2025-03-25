@@ -1,18 +1,19 @@
-import {NextRequest, NextResponse} from 'next/server'
-import { Lineage} from "@/app/demo/types";
-import * as mongoDB  from  "mongodb";
-import { WithId} from "mongodb";
+import { NextRequest, NextResponse } from 'next/server'
+import { Lineage } from "@/app/demo/types";
+import * as mongoDB from "mongodb";
+import { WithId } from "mongodb";
+import { DEFAULT_MONGO_URI } from '@/app/variables';
 
-const uri = process.env.MONGO_URI || "mongodb://localhost:27017?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000";
+const uri = process.env.MONGO_URI || DEFAULT_MONGO_URI;
 
 const mongoClient = new mongoDB.MongoClient(uri);
 const animalsDB = mongoClient.db("animals");
 
 interface Error {
-    msg:string
+    msg: string
 }
 
-export async function getLineages():Promise<Lineage[]>{
+export async function getLineages(): Promise<Lineage[]> {
     await mongoClient.connect()
     const collection = animalsDB.collection<Lineage>("lineages")
 

@@ -8,38 +8,39 @@
 }
 
 .popover {
-    background-color:gainsboro;
+    background-color: gainsboro;
     border-radius: 8px;
 }
 
 .arrow path {
-    fill:$light;
+    fill: $light;
 }
 
 .badge {
-    position:fixed;
-    bottom:0;
-    right:0;
-    background-color:rgba($gray-200, 0.9);
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    background-color: rgba($gray-200, 0.9);
     border-top-left-radius: $border-radius;
 
 }
 
 .container {
-    padding:0 60px;
+    padding: 0 60px;
     //border:1px solid green;
-    position:relative;
+    position: relative;
     overflow: hidden;
-    margin-bottom:30px;
+    margin-bottom: 30px;
 }
 
 .arrow {
-    position:absolute;
+    position: absolute;
 }
+
 $arrow-size: 15px;
 
 .circle {
-    width:10px;
+    width: 10px;
     height: 10px;
     border-radius: 10px;
     background-color: black;
@@ -62,19 +63,23 @@ $arrow-size: 15px;
 
     border-left: #{$arrow-size} solid gainsboro;
 }
-$breakpoint:map-get($grid-breakpoints,"md");
 
-$max-width:$breakpoint - 1;
+$breakpoint: map-get($grid-breakpoints, "md");
+
+$max-width: $breakpoint - 1;
 
 .types-legend {
     white-space: nowrap;
 }
+
 @media (max-width:$max-width) {
     .container {
-        padding:0;
+        padding: 0;
     }
+
     .hide-on-mobile {
-        display:none;
+        display: none;
     }
 }
+
 //map-get($grid-breakpoints,"xxl");

@@ -1,17 +1,19 @@
 @import "../../../styles/variables";
+
 .modal {
-  position:fixed;
+  position: fixed;
   overflow-anchor: none;
-  color:var(--bs-body-color);
+  color: var(--bs-body-color);
   background-color: $body-bg;
   width: auto;
   height: auto;
-  margin:20px;
-  padding:0;
+  margin: 20px;
+  padding: 0;
   max-width: none;
   max-height: none;
   overflow: visible;
 }
+
 .content {
   overflow: auto;
   //margin: 20px;
@@ -19,6 +21,7 @@
   height: 100%;
   padding: 20px;
 }
+
 .close-button {
   position: absolute;
   top: 0px;
@@ -30,11 +33,12 @@
   align-items: center;
   justify-content: center;
   border-radius: 100px;
-  color:white;
-  transform: translate(50%,-50%);
+  color: white;
+  transform: translate(50%, -50%);
   z-index: 2000;
 }
+
 .close-button:focus,
-.close-button:hover{
-  filter:brightness(1.05);
+.close-button:hover {
+  filter: brightness(1.05);
 }

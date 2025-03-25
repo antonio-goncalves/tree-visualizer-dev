@@ -4,22 +4,22 @@ import './index.scss'
 
 import styles from './index.module.scss'
 import Image from "next/image";
-import {ElementPreview} from "@/app/demo/types";
-import {image} from "d3";
-import {CSSProperties} from "react";
-import {TreeElementType} from "@/app/demo/components/Tree";
+import { ElementPreview } from "@/app/demo/types";
+import { image } from "d3";
+import { CSSProperties } from "react";
+import { TreeElementType } from "@/app/demo/components/Tree";
 import References from "@/app/demo/components/References";
-interface  PopoverProps {
-    data?:ElementPreview,
-    isLoading?:boolean,
-    failed?:boolean
+interface PopoverProps {
+    data?: ElementPreview,
+    isLoading?: boolean,
+    failed?: boolean
 }
 
 
 
-export default function Preview({data,isLoading,failed}:PopoverProps){
+export default function Preview({ data, isLoading, failed }: PopoverProps) {
 
-    function renderPlaceholders(){
+    function renderPlaceholders() {
         return (
             <div className="ph-item">
 
@@ -29,7 +29,6 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
                     </div>
                     <div className="ph-picture"></div>
                     <div className="ph-row">
-
                         <div className="ph-col-12 paragraph"></div>
                         <div className="ph-col-12 paragraph"></div>
                         <div className="ph-col-12 paragraph"></div>
@@ -40,15 +39,15 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
             </div>
         )
     }
-    function renderImage(){
+    function renderImage() {
         const image = data?.image
-        if(!image) return null
+        if (!image) return null
 
         return (
-            <div style={{aspectRatio:image.aspectRatio}} className={classnames("image-container","mb-2","rounded","overflow-hidden")}>
+            <div style={{ aspectRatio: image.aspectRatio }} className={classnames("image-container", "mb-2", "rounded", "overflow-hidden")}>
 
                 <Image
-                    style={{objectFit: "cover"}}
+                    style={{ objectFit: "cover" }}
                     sizes={"328px"}
                     fill={true}
                     alt={image.alt}
@@ -63,30 +62,30 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
 
     function renderSubTitle() {
 
-        if(!data?.subTitle) return null
-        return <p className={"mb-2"} style={{color:data.subTitleColor}}><b>{data.subTitle}</b></p>
+        if (!data?.subTitle) return null
+        return <p className={"mb-2"} style={{ color: data.subTitleColor }}><b>{data.subTitle}</b></p>
     }
 
-    function renderInfo(){
+    function renderInfo() {
 
-        if(failed){
+        if (failed) {
             return (
                 <p className={"mb-0 text-danger text-center"}>Failed while loading the data</p>
             )
         }
-        if(isLoading){
+        if (isLoading) {
             return renderPlaceholders()
         }
-        if(!data) return null
-        const {description,title} = data
+        if (!data) return null
+        const { description, title } = data
         const paragraphs = description.split("\n")
 
         //@ts-ignore
         const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
-        let descriptionStyle:CSSProperties | undefined
-        let paragraphClassName:string | undefined
-        if(isSafari){
-            descriptionStyle = {WebkitLineClamp:Math.round(8/paragraphs.length)}
+        let descriptionStyle: CSSProperties | undefined
+        let paragraphClassName: string | undefined
+        if (isSafari) {
+            descriptionStyle = { WebkitLineClamp: Math.round(8 / paragraphs.length) }
             paragraphClassName = "overflow-hidden"
         }
 
@@ -95,12 +94,12 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
                 <h1>{title}</h1>
                 {renderSubTitle()}
                 {renderImage()}
-                <References references={data.references} className={"mb-2"}/>
+                <References references={data.references} className={"mb-2"} />
 
                 <div style={descriptionStyle} className={styles.description}>
                     {
-                        paragraphs.map((d,i)=>(
-                            <p key={i} className={classnames(paragraphClassName,{"mb-0":i===paragraphs.length-1})}>
+                        paragraphs.map((d, i) => (
+                            <p key={i} className={classnames(paragraphClassName, { "mb-0": i === paragraphs.length - 1 })}>
                                 {d}
                             </p>
                         ))
@@ -117,7 +116,7 @@ export default function Preview({data,isLoading,failed}:PopoverProps){
 
 
     return (
-        <section className={classnames("preview","p-3 shadow rounded")}>
+        <section className={classnames("preview", "p-3 shadow rounded")}>
             {renderInfo()}
         </section>
     )

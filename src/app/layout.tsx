@@ -1,10 +1,10 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import "/src/app/styles/index.scss"
-import {Metadata} from "next";
+import { Metadata } from "next";
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata:Metadata = {
+export const metadata: Metadata = {
   title: 'Live demo'
 }
 

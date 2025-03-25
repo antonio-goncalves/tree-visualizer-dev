@@ -2,25 +2,28 @@
 @import "/node_modules/bootstrap/scss/variables";
 @import "/src/app/styles/variables";
 @import "index.module";
-$image-height:250px;
+$image-height: 250px;
+
 .preview {
   background: $body-bg;
-  width:$popover-width;
+  width: $popover-width;
 
 }
 
 .preview .ph-picture {
-  height:$image-height;
+  height: $image-height;
 }
+
 .preview .ph-row .title {
   height: 36px;
   margin: 10px 0;
 }
+
 .preview .ph-row .paragraph {
-  margin-top:12px;
+  margin-top: 12px;
 }
 
-.preview .ph-row  > *{
+.preview .ph-row>* {
   border-radius: $border-radius;
 }
 
@@ -29,4 +32,3 @@ $image-height:250px;
   position: relative;
   aspect-ratio: 4/3;
 }
-

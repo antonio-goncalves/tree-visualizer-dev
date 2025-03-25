@@ -1,17 +1,17 @@
 
-export function getNumberFromCSSString(str:string,unit:string = "px"):number{
+export function getNumberFromCSSString(str: string, unit: string = "px"): number {
     return Number(str.split(unit)[0])
 }
 
 export default class WebUtils {
-    static lockedBody:boolean = false
-    static isTouchDevice(){
+    static lockedBody: boolean = false
+    static isTouchDevice() {
         return (('ontouchstart' in window) ||
             (navigator.maxTouchPoints > 0));
     }
-    static lockBodyScroll(){
+    static lockBodyScroll() {
 
-        if(this.lockedBody) return
+        if (this.lockedBody) return
         this.lockedBody = true
         document.documentElement.style.scrollBehavior = "auto"
         document.body.style.top = `-${window.scrollY}px`;
@@ -21,9 +21,9 @@ export default class WebUtils {
         document.body.style.position = "fixed";
     }
 
-    static unLockBodyScroll(){
+    static unLockBodyScroll() {
 
-        if(!this.lockedBody) return
+        if (!this.lockedBody) return
         this.lockedBody = false
         document.body.style.position = "static";
         window.scrollTo({
@@ -32,9 +32,9 @@ export default class WebUtils {
         })
         document.documentElement.style.scrollBehavior = "smooth"
         document.body.style.top = "auto";
-        document.body.style.left =  "auto";
+        document.body.style.left = "auto";
         document.body.style.right = "auto";
-        document.body.style.bottom =  "auto";
+        document.body.style.bottom = "auto";
 
 
     }
